@@ -18,6 +18,8 @@ namespace TiPEIS
         private DataSet DS = new DataSet();
         private DataTable DT = new DataTable();
         private string sPath = "D:\\data\\SQLiteStudio-3.2.1\\SQLiteStudio\\db\\mybd.db";
+        private int minLenght = 2;
+        private int maxLenght = 50;
 
         public FormSubdivision()
         {
@@ -30,7 +32,7 @@ namespace TiPEIS
 ";New=False;Version=3";
             String selectCommand = "Select * from Subdivision";
             selectTable(ConnectionString, selectCommand);
-            String selectSubd = "SELECT idChartOfAccounts, Account FROM ChartOfAccounts";
+            String selectSubd = "SELECT idChartOfAccounts, Account FROM ChartOfAccounts WHERE Account<30";
             selectCombo(ConnectionString, selectSubd, toolStripComboBox1, "Account",
 "idChartOfAccounts");
             toolStripComboBox1.SelectedIndex = -1;
@@ -53,6 +55,16 @@ ToolStripComboBox comboBox, string displayMember, string valueMember)
         }
         private void bindingNavigatorAddNewItem_Click(object sender, EventArgs e)
         {
+            if (!(toolStripTextBox1.Text.Length > minLenght && toolStripTextBox1.Text.Length < maxLenght))
+            {
+                MessageBox.Show("Поле Название должно содержать не менее 3 и не более 50 символов");
+                return;
+            }
+            if (toolStripComboBox1.Text == "")
+            {
+                MessageBox.Show("Выберите счет затрат");
+                return;
+            }
             string ConnectionString = @"Data Source=" + sPath +
 ";New=False;Version=3";
             String selectCommand = "select MAX(idSubdivision) from Subdivision";
@@ -148,6 +160,16 @@ connect);
         }
         private void toolStripButtonEdit_Click(object sender, EventArgs e)
         {
+            if (!(toolStripTextBox1.Text.Length > minLenght && toolStripTextBox1.Text.Length < maxLenght))
+            {
+                MessageBox.Show("Поле Название должно содержать не менее 3 и не более 50 символов");
+                return;
+            }
+            if (toolStripComboBox1.Text == "")
+            {
+                MessageBox.Show("Выберите счет затрат");
+                return;
+            }
             //выбрана строка CurrentRow
             int CurrentRow = dataGridView1.SelectedCells[0].RowIndex;
             //получить значение FIO выбранной строки

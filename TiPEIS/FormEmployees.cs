@@ -19,7 +19,8 @@ namespace TiPEIS
         private DataSet DS = new DataSet();
         private DataTable DT = new DataTable();
         private string sPath = "D:\\data\\SQLiteStudio-3.2.1\\SQLiteStudio\\db\\mybd.db";
-
+        private int minLenght = 2;
+        private int maxLenght = 50;
         public FormEmployees()
         {
             InitializeComponent();
@@ -54,28 +55,42 @@ ToolStripComboBox comboBox, string displayMember, string valueMember)
         }
         private void bindingNavigatorAddNewItem_Click(object sender, EventArgs e)
         {
+            if (!(toolStripTextBox1.Text.Length > minLenght && toolStripTextBox1.Text.Length < maxLenght))
+            {
+                MessageBox.Show("Поле ФИО должно содержать не менее 3 и не более 50 символов");
+                return;
+            }
+            if (!(toolStripTextBox2.Text.Length > minLenght && toolStripTextBox2.Text.Length < maxLenght))
+            {
+                MessageBox.Show("Поле Личные данные должно содержать не менее 3 и не более 50 символов");
+                return;
+            }
+            if (toolStripComboBox1.Text == "")
+            {
+                MessageBox.Show("Выберите подразделение");
+                return;
+            }
+            //вставка в таблицу Employees           
+            if (toolStripTextBox3.Text.IndexOf('.') > 0)
+            {
+                if (toolStripTextBox3.Text.Substring(toolStripTextBox3.Text.IndexOf('.')).Length > 3)
+                {
+                    MessageBox.Show("Зарплата должна быть не более 15 символов и иметь не более 2-ух знаков после запятой");
+                    return;
+                }
+            }
             string ConnectionString = @"Data Source=" + sPath +
 ";New=False;Version=3";
             String selectCommand = "select MAX(idEmployees) from Employees";
             object maxValue = selectValue(ConnectionString, selectCommand);
             if (Convert.ToString(maxValue) == "")
                 maxValue = 0;
-            //вставка в таблицу Employees
-            string pattern = @"\d{1,15}[.]\d{0,2}$";
-            if (Regex.IsMatch(toolStripTextBox3.Text, pattern, RegexOptions.IgnoreCase))
-            {
-                string txtSQLQuery = "insert into Employees (idEmployees,FIO, PersonalInfo, Salary, Subdivision) values (" +
-           (Convert.ToInt32(maxValue) + 1) + ", '" + toolStripTextBox1.Text + "', '" + toolStripTextBox2.Text + "','" + toolStripTextBox3.Text + "','" + toolStripComboBox1.Text + "')";
-                ExecuteQuery(txtSQLQuery);
-                //обновление dataGridView1
-                selectCommand = "select * from Employees";
-                refreshForm(ConnectionString, selectCommand);
-                toolStripTextBox1.Text = "";
-            }
-            else
-            {
-                MessageBox.Show("Зарплата должна быть не более 15 символов и иметь не более 2-ух знаков после запятой");
-            }
+            string txtSQLQuery = "insert into Employees (idEmployees,FIO, PersonalInfo, Salary, Subdivision) values (" +
+       (Convert.ToInt32(maxValue) + 1) + ", '" + toolStripTextBox1.Text + "', '" + toolStripTextBox2.Text + "','" + toolStripTextBox3.Text + "','" + toolStripComboBox1.Text + "')";
+            ExecuteQuery(txtSQLQuery);
+            //обновление dataGridView1
+            selectCommand = "select * from Employees";
+            refreshForm(ConnectionString, selectCommand);
         }
         public object selectValue(string ConnectionString, String selectCommand)
         {
@@ -83,7 +98,7 @@ ToolStripComboBox comboBox, string displayMember, string valueMember)
            SQLiteConnection(ConnectionString);
             connect.Open();
             SQLiteCommand command = new SQLiteCommand(selectCommand,
-connect);
+    connect);
             SQLiteDataReader reader = command.ExecuteReader();
             object value = "";
             while (reader.Read())
@@ -157,6 +172,30 @@ connect);
         }
         private void toolStripButtonEdit_Click(object sender, EventArgs e)
         {
+            if (!(toolStripTextBox1.Text.Length > minLenght && toolStripTextBox1.Text.Length < maxLenght))
+            {
+                MessageBox.Show("Поле ФИО должно содержать не менее 3 и не более 50 символов");
+                return;
+            }
+            if (!(toolStripTextBox2.Text.Length > minLenght && toolStripTextBox2.Text.Length < maxLenght))
+            {
+                MessageBox.Show("Поле Личные данные должно содержать не менее 3 и не более 50 символов");
+                return;
+            }
+            if (toolStripComboBox1.Text == "")
+            {
+                MessageBox.Show("Выберите подразделение");
+                return;
+            }
+            //вставка в таблицу Employees           
+            if (toolStripTextBox3.Text.IndexOf('.') > 0)
+            {
+                if (toolStripTextBox3.Text.Substring(toolStripTextBox3.Text.IndexOf('.')).Length > 3)
+                {
+                    MessageBox.Show("Зарплата должна быть не более 15 символов и иметь не более 2-ух знаков после запятой");
+                    return;
+                }
+            }
             //выбрана строка CurrentRow
             int CurrentRow = dataGridView1.SelectedCells[0].RowIndex;
             //получить значение FIO выбранной строки
@@ -171,17 +210,9 @@ connect);
             selectCommand = "update Employees set PersonalInfo='" + changePersonalInfo + "' where idEmployees = " + valueId;
             changeValue(ConnectionString, selectCommand);
             string changeSalary = toolStripTextBox3.Text;
-            string pattern = @"\d{1,15}[.]\d{0,2}$";
-            if (Regex.IsMatch(toolStripTextBox3.Text, pattern, RegexOptions.IgnoreCase))
-            {
-                selectCommand = "update Employees set Salary='" + changeSalary + "' where idEmployees = " + valueId;
-                changeValue(ConnectionString, selectCommand);
-            }
-            else
-            {
-                MessageBox.Show("Зарплата должна быть не более 15 символов и иметь не более 2-ух знаков после запятой");
-            }
-                string changeSubdivision = toolStripComboBox1.Text;
+            selectCommand = "update Employees set Salary='" + changeSalary + "' where idEmployees = " + valueId;
+            changeValue(ConnectionString, selectCommand);
+            string changeSubdivision = toolStripComboBox1.Text;
             selectCommand = "update Employees set Subdivision='" + changeSubdivision + "' where idEmployees = " + valueId;
             changeValue(ConnectionString, selectCommand);
             //обновление dataGridView1
@@ -190,7 +221,7 @@ connect);
             toolStripTextBox1.Text = "";
         }
         private void dataGridView1_CellMouseClick(object sender,
-DataGridViewCellMouseEventArgs e)
+    DataGridViewCellMouseEventArgs e)
         {
             //выбрана строка CurrentRow
             int CurrentRow = dataGridView1.SelectedCells[0].RowIndex;
@@ -203,6 +234,21 @@ DataGridViewCellMouseEventArgs e)
             toolStripTextBox3.Text = SalaryId;
             string SubdivisionId = dataGridView1[4, CurrentRow].Value.ToString();
             toolStripComboBox1.Text = SubdivisionId;
+        }
+        private void toolStripTextBox3_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char l = e.KeyChar;
+            if ((l < '0' || l > '9') && l != '\b')
+            {
+                if (toolStripTextBox3.SelectionStart == 0)
+                {
+                    if (l == '.') e.Handled = true;
+                }
+                if (l != '.' || toolStripTextBox3.Text.IndexOf(".") != -1)
+                {
+                    e.Handled = true;
+                }
+            }
         }
     }
 }

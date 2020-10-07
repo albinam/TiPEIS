@@ -19,6 +19,8 @@ namespace TiPEIS
         private DataSet DS = new DataSet();
         private DataTable DT = new DataTable();
         private string sPath = "D:\\data\\SQLiteStudio-3.2.1\\SQLiteStudio\\db\\mybd.db";
+        private int minLenght = 2;
+        private int maxLenght = 50;
 
         public FormTypeOfCalculation()
         {
@@ -30,32 +32,41 @@ namespace TiPEIS
             string ConnectionString = @"Data Source=" + sPath +
 ";New=False;Version=3";
             String selectCommand = "Select * from TypeOfCalculation";
-            selectTable(ConnectionString, selectCommand);        
-        }       
+            selectTable(ConnectionString, selectCommand);
+        }
         private void bindingNavigatorAddNewItem_Click(object sender, EventArgs e)
         {
+            if (!(toolStripTextBox1.Text.Length > minLenght && toolStripTextBox1.Text.Length < maxLenght))
+            {
+                MessageBox.Show("Поле Название должно содержать не менее 3 и не более 50 символов");
+                return;
+            }
+            if (!(toolStripTextBox2.Text.Length > minLenght && toolStripTextBox2.Text.Length < maxLenght))
+            {
+                MessageBox.Show("Поле Тип должно содержать не менее 3 и не более 50 символов");
+                return;
+            }
+            if (toolStripTextBox3.Text.IndexOf('.') > 0)
+            {
+                if (toolStripTextBox3.Text.Substring(toolStripTextBox3.Text.IndexOf('.')).Length > 3)
+                {
+                    MessageBox.Show("Процент должен быть не более 15 символов и иметь не более 2-ух знаков после запятой");
+                    return;
+                }
+            }
             string ConnectionString = @"Data Source=" + sPath +
 ";New=False;Version=3";
             String selectCommand = "select MAX(idTypeOfCalculation) from TypeOfCalculation";
             object maxValue = selectValue(ConnectionString, selectCommand);
             if (Convert.ToString(maxValue) == "")
                 maxValue = 0;
-            //вставка в таблицу Employees
-            string pattern = @"\d{1,15}[.]\d{0,2}$";
-            if (Regex.IsMatch(toolStripTextBox3.Text, pattern, RegexOptions.IgnoreCase))
-            {
-                string txtSQLQuery = "insert into TypeOfCalculation (idTypeOfCalculation,Name,Type,Percent) values (" +
-           (Convert.ToInt32(maxValue) + 1) + ", '" + toolStripTextBox1.Text + "', '" + toolStripTextBox2.Text + "','" + toolStripTextBox3.Text + "')";
-                ExecuteQuery(txtSQLQuery);
-                //обновление dataGridView1
-                selectCommand = "select * from TypeOfCalculation";
-                refreshForm(ConnectionString, selectCommand);
-                toolStripTextBox1.Text = "";
-            }
-            else
-            {
-                MessageBox.Show("Процент должен быть не более 15 символов и иметь не более 2-ух знаков после запятой");
-            }
+            //вставка в таблицу Employee       
+            string txtSQLQuery = "insert into TypeOfCalculation (idTypeOfCalculation,Name,Type,Percent) values (" +
+       (Convert.ToInt32(maxValue) + 1) + ", '" + toolStripTextBox1.Text + "', '" + toolStripTextBox2.Text + "','" + toolStripTextBox3.Text + "')";
+            ExecuteQuery(txtSQLQuery);
+            //обновление dataGridView1
+            selectCommand = "select * from TypeOfCalculation";
+            refreshForm(ConnectionString, selectCommand);
         }
         public object selectValue(string ConnectionString, String selectCommand)
         {
@@ -136,6 +147,24 @@ connect);
         }
         private void toolStripButtonEdit_Click(object sender, EventArgs e)
         {
+            if (!(toolStripTextBox1.Text.Length > minLenght && toolStripTextBox1.Text.Length < maxLenght))
+            {
+                MessageBox.Show("Поле Название должно содержать не менее 3 и не более 50 символов");
+                return;
+            }
+            if (!(toolStripTextBox2.Text.Length > minLenght && toolStripTextBox2.Text.Length < maxLenght))
+            {
+                MessageBox.Show("Поле Тип должно содержать не менее 3 и не более 50 символов");
+                return;
+            }
+            if (toolStripTextBox3.Text.IndexOf('.') > 0)
+            {
+                if (toolStripTextBox3.Text.Substring(toolStripTextBox3.Text.IndexOf('.')).Length > 3)
+                {
+                    MessageBox.Show("Процент должен быть не более 15 символов и иметь не более 2-ух знаков после запятой");
+                    return;
+                }
+            }
             //выбрана строка CurrentRow
             int CurrentRow = dataGridView1.SelectedCells[0].RowIndex;
             //получить значение FIO выбранной строки
@@ -151,15 +180,8 @@ connect);
             changeValue(ConnectionString, selectCommand);
             string changePercent = toolStripTextBox3.Text;
             string pattern = @"\d{1,15}[.]\d{0,2}$";
-            if (Regex.IsMatch(toolStripTextBox3.Text, pattern, RegexOptions.IgnoreCase))
-            {
-                selectCommand = "update TypeOfCalculation set Percent='" + changePercent + "' where idTypeOfCalculation = " + valueId;
-                changeValue(ConnectionString, selectCommand);
-            }
-            else
-            {
-                MessageBox.Show("Процент должен быть не более 15 символов и иметь не более 2-ух знаков после запятой");
-            }         
+            selectCommand = "update TypeOfCalculation set Percent='" + changePercent + "' where idTypeOfCalculation = " + valueId;
+            changeValue(ConnectionString, selectCommand);
             //обновление dataGridView1
             selectCommand = "select * from TypeOfCalculation";
             refreshForm(ConnectionString, selectCommand);
@@ -176,7 +198,22 @@ DataGridViewCellMouseEventArgs e)
             string TypeId = dataGridView1[2, CurrentRow].Value.ToString();
             toolStripTextBox2.Text = TypeId;
             string PercentId = dataGridView1[3, CurrentRow].Value.ToString();
-            toolStripTextBox3.Text = PercentId;          
+            toolStripTextBox3.Text = PercentId;
+        }
+        private void toolStripTextBox3_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char l = e.KeyChar;
+            if ((l < '0' || l > '9') && l != '\b')
+            {
+                if (toolStripTextBox3.SelectionStart == 0)
+                {
+                    if (l == '.') e.Handled = true;
+                }
+                if (l != '.' || toolStripTextBox3.Text.IndexOf(".") != -1)
+                {
+                    e.Handled = true;
+                }
+            }
         }
     }
 }
