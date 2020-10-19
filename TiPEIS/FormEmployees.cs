@@ -79,6 +79,7 @@ ToolStripComboBox comboBox, string displayMember, string valueMember)
                     return;
                 }
             }
+            toolStripTextBox3.Text = toolStripTextBox3.Text.Replace(",", ".");
             string ConnectionString = @"Data Source=" + sPath +
 ";New=False;Version=3";
             String selectCommand = "select MAX(idEmployees) from Employees";
@@ -196,6 +197,7 @@ ToolStripComboBox comboBox, string displayMember, string valueMember)
                     return;
                 }
             }
+            toolStripTextBox3.Text = toolStripTextBox3.Text.Replace(",", ".");
             //выбрана строка CurrentRow
             int CurrentRow = dataGridView1.SelectedCells[0].RowIndex;
             //получить значение FIO выбранной строки

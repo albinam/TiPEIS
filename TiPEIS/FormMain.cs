@@ -40,5 +40,11 @@ namespace TiPEIS
             FormTypeOfCalculation newForm = new FormTypeOfCalculation();
             newForm.Show();
         }
+
+        private void журналПроводокToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormJournalOfOperations newForm = new FormJournalOfOperations();
+            newForm.Show();
+        }
     }
 }

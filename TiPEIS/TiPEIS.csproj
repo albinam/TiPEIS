@@ -65,6 +65,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FormAddOperation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAddOperation.Designer.cs">
+      <DependentUpon>FormAddOperation.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormChartOfAccounts.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -76,6 +82,12 @@
     </Compile>
     <Compile Include="FormEmployees.Designer.cs">
       <DependentUpon>FormEmployees.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormJournalOfOperations.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormJournalOfOperations.Designer.cs">
+      <DependentUpon>FormJournalOfOperations.cs</DependentUpon>
     </Compile>
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
@@ -97,11 +109,17 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FormAddOperation.resx">
+      <DependentUpon>FormAddOperation.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormChartOfAccounts.resx">
       <DependentUpon>FormChartOfAccounts.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormEmployees.resx">
       <DependentUpon>FormEmployees.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormJournalOfOperations.resx">
+      <DependentUpon>FormJournalOfOperations.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>

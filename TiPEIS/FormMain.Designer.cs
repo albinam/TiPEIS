@@ -32,10 +32,10 @@
             this.справочникиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.подразделенияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.сотрудникиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.видРасчетаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.планСчетовToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.журналПроводокToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.отчетToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.видРасчетаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -65,42 +65,43 @@
             // подразделенияToolStripMenuItem
             // 
             this.подразделенияToolStripMenuItem.Name = "подразделенияToolStripMenuItem";
-            this.подразделенияToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.подразделенияToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.подразделенияToolStripMenuItem.Text = "Подразделения";
             this.подразделенияToolStripMenuItem.Click += new System.EventHandler(this.подразделенияToolStripMenuItem_Click);
             // 
             // сотрудникиToolStripMenuItem
             // 
             this.сотрудникиToolStripMenuItem.Name = "сотрудникиToolStripMenuItem";
-            this.сотрудникиToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.сотрудникиToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.сотрудникиToolStripMenuItem.Text = "Сотрудники";
             this.сотрудникиToolStripMenuItem.Click += new System.EventHandler(this.сотрудникиToolStripMenuItem_Click);
+            // 
+            // видРасчетаToolStripMenuItem
+            // 
+            this.видРасчетаToolStripMenuItem.Name = "видРасчетаToolStripMenuItem";
+            this.видРасчетаToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.видРасчетаToolStripMenuItem.Text = "Вид расчета";
+            this.видРасчетаToolStripMenuItem.Click += new System.EventHandler(this.видРасчетаToolStripMenuItem_Click);
             // 
             // планСчетовToolStripMenuItem
             // 
             this.планСчетовToolStripMenuItem.Name = "планСчетовToolStripMenuItem";
-            this.планСчетовToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.планСчетовToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.планСчетовToolStripMenuItem.Text = "План счетов";
             this.планСчетовToolStripMenuItem.Click += new System.EventHandler(this.планСчетовToolStripMenuItem_Click);
             // 
             // журналПроводокToolStripMenuItem
             // 
             this.журналПроводокToolStripMenuItem.Name = "журналПроводокToolStripMenuItem";
-            this.журналПроводокToolStripMenuItem.Size = new System.Drawing.Size(119, 20);
-            this.журналПроводокToolStripMenuItem.Text = "Журнал проводок";
+            this.журналПроводокToolStripMenuItem.Size = new System.Drawing.Size(120, 20);
+            this.журналПроводокToolStripMenuItem.Text = "Журнал операций";
+            this.журналПроводокToolStripMenuItem.Click += new System.EventHandler(this.журналПроводокToolStripMenuItem_Click);
             // 
             // отчетToolStripMenuItem
             // 
             this.отчетToolStripMenuItem.Name = "отчетToolStripMenuItem";
             this.отчетToolStripMenuItem.Size = new System.Drawing.Size(51, 20);
             this.отчетToolStripMenuItem.Text = "Отчет";
-            // 
-            // видРасчетаToolStripMenuItem
-            // 
-            this.видРасчетаToolStripMenuItem.Name = "видРасчетаToolStripMenuItem";
-            this.видРасчетаToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.видРасчетаToolStripMenuItem.Text = "Вид расчета";
-            this.видРасчетаToolStripMenuItem.Click += new System.EventHandler(this.видРасчетаToolStripMenuItem_Click);
             // 
             // FormMain
             // 
