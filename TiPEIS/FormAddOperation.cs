@@ -27,20 +27,21 @@ namespace TiPEIS
         }
         private void FormAddOperation_Load(object sender, EventArgs e)
         {
+            toolStripComboBoxEmployees.SelectedIndex = -1;
+            comboBoxIdSubdivision.SelectedIndex = -1;
+            comboBoxTypeOfCalculation.SelectedIndex = -1;
             string ConnectionString = @"Data Source=" + sPath + ";New=False;Version=3";
             String selectCommand;
             String selectSubd = "SELECT idSubdivision, Name FROM Subdivision";
-            selectComboSubdivision(ConnectionString, selectSubd, toolStripComboBoxIdSubdivision, "Name",
+            selectCombo(ConnectionString, selectSubd, comboBoxIdSubdivision, "Name",
 "idSubdivision");
             String selectType = "Select idTypeOfCalculation,Name from TypeOfCalculation";
-            selectComboTypeOfCalculation(ConnectionString, selectType, comboBoxTypeOfCalculation, "Name",
+            selectCombo(ConnectionString, selectType, comboBoxTypeOfCalculation, "Name",
 "idTypeOfCalculation");
             String selectEmployees = "Select idEmployees,FIO from Employees ";
             selectComboEmployees(ConnectionString, selectEmployees, toolStripComboBoxEmployees, "FIO",
 "idEmployees");
-            toolStripComboBoxEmployees.SelectedIndex = -1;
-            toolStripComboBoxIdSubdivision.SelectedIndex = -1;
-            comboBoxTypeOfCalculation.SelectedIndex = -1;
+           
             dateTimePicker2.Format = DateTimePickerFormat.Custom;
             dateTimePicker2.CustomFormat = "MM/yyyy";
             ConnectionString = @"Data Source=" + sPath + ";New=False;Version=3";
@@ -55,6 +56,8 @@ namespace TiPEIS
             }
             else
             {
+                comboBoxIdSubdivision.Enabled = false;
+                comboBoxTypeOfCalculation.Enabled = false;
                 textBoxNumber.Text = ID.ToString();
                 selectCommand = "Select * from JournalOfOperations where idJournalOfOperations =" + textBoxNumber.Text;
                 selectOperation(ConnectionString, selectCommand);
@@ -74,7 +77,7 @@ namespace TiPEIS
             dataAdapter.Fill(ds);
             dateTimePicker1.DataBindings.Add(new Binding("Text", ds.Tables[0], "Date", true));
             dateTimePicker2.DataBindings.Add(new Binding("Text", ds.Tables[0], "Month", true));
-            toolStripComboBoxIdSubdivision.Text = ds.Tables[0].Rows[0].ItemArray[5].ToString();
+            comboBoxIdSubdivision.Text = ds.Tables[0].Rows[0].ItemArray[5].ToString();
             comboBoxTypeOfCalculation.Text = ds.Tables[0].Rows[0].ItemArray[4].ToString();
             connect.Close();
         }
@@ -106,7 +109,7 @@ namespace TiPEIS
                 textBoxTotal.Text = Sum.ToString();
             }
         }
-        public void selectComboSubdivision(string ConnectionString, String selectCommand,
+        public void selectCombo(string ConnectionString, String selectCommand,
        ComboBox comboBox, string displayMember, string valueMember)
         {
             SQLiteConnection connect = new
@@ -120,22 +123,9 @@ namespace TiPEIS
             comboBox.DisplayMember = displayMember;
             comboBox.ValueMember = valueMember;
             connect.Close();
-        }
-        public void selectComboTypeOfCalculation(string ConnectionString, String selectCommand,
-  ComboBox comboBox, string displayMember, string valueMember)
-        {
-            SQLiteConnection connect = new
-           SQLiteConnection(ConnectionString);
-            connect.Open();
-            SQLiteDataAdapter dataAdapter = new
-           SQLiteDataAdapter(selectCommand, connect);
-            DataSet ds = new DataSet();
-            dataAdapter.Fill(ds);
-            comboBox.DataSource = ds.Tables[0];
-            comboBox.DisplayMember = displayMember;
-            comboBox.ValueMember = valueMember;
-            connect.Close();
-        }
+            comboBoxIdSubdivision.SelectedIndex = -1;
+            comboBoxTypeOfCalculation.SelectedIndex = -1;
+        }        
         public void selectComboEmployees(string ConnectionString, String selectCommand,
       ToolStripComboBox comboBox, string displayMember, string valueMember)
         {
@@ -150,6 +140,7 @@ namespace TiPEIS
             comboBox.ComboBox.DisplayMember = displayMember;
             comboBox.ComboBox.ValueMember = valueMember;
             connect.Close();
+            toolStripComboBoxEmployees.SelectedIndex = -1;
         }
         public void selectTable(string ConnectionString, String selectCommand)
         {
@@ -183,6 +174,16 @@ namespace TiPEIS
             dataGridView1.Refresh();
             toolStripTextBoxSum.Clear();
             toolStripComboBoxEmployees.SelectedIndex = -1;
+            if (dataGridView1.Rows.Count > 0)
+            {
+                comboBoxIdSubdivision.Enabled = false;
+                comboBoxTypeOfCalculation.Enabled = false;
+            }
+            else
+            {
+                comboBoxIdSubdivision.Enabled = true;
+                comboBoxTypeOfCalculation.Enabled = true;
+            }
             getSum();
         }
         private void ToolStripButtonAdd_Click(object sender, EventArgs e)
@@ -203,11 +204,11 @@ namespace TiPEIS
             {
                 if (comboBoxTypeOfCalculation.Text != "")
                 {
-                    if (toolStripComboBoxIdSubdivision.Text != "")
+                    if (comboBoxIdSubdivision.Text != "")
                     {
                         selectCommand = "select Subdivision from Employees where idEmployees = " + toolStripComboBoxEmployees.ComboBox.SelectedValue.ToString();
                         object subd = selectValue(ConnectionString, selectCommand);
-                        if (Convert.ToString(subd) == toolStripComboBoxIdSubdivision.Text)
+                        if (Convert.ToString(subd) == comboBoxIdSubdivision.Text)
                         {
                             if (toolStripTextBoxSum.Text != "" && toolStripTextBoxSum.Text != "0")
                             {
@@ -276,11 +277,11 @@ namespace TiPEIS
             {
                 if (comboBoxTypeOfCalculation.Text != "")
                 {
-                    if (toolStripComboBoxIdSubdivision.Text != "")
+                    if (comboBoxIdSubdivision.Text != "")
                     {
                         selectCommand = "select Subdivision from Employees where idEmployees = " + toolStripComboBoxEmployees.ComboBox.SelectedValue.ToString();
                         object subd = selectValue(ConnectionString, selectCommand);
-                        if (Convert.ToString(subd) == toolStripComboBoxIdSubdivision.Text)
+                        if (Convert.ToString(subd) == comboBoxIdSubdivision.Text)
                         {
                             if (toolStripTextBoxSum.Text != "" && toolStripTextBoxSum.Text != "0")
                             {
@@ -352,16 +353,18 @@ namespace TiPEIS
                     if (ID == null)
                     {
                         string txtSQLQuery = "insert into JournalOfOperations (idJournalOfOperations, idSubdivision,idTypeOfCalculation, Date, Month, Sum) values ('" +
-                       textBoxNumber.Text + "', '" + toolStripComboBoxIdSubdivision.Text + "','" + comboBoxTypeOfCalculation.Text + "','" + dateTimePicker1.Value.ToShortDateString() + "', '" + month + "', '" + textBoxTotal.Text + "')";
+                       textBoxNumber.Text + "', '" + comboBoxIdSubdivision.Text + "','" + comboBoxTypeOfCalculation.Text + "','" + dateTimePicker1.Value.ToShortDateString() + "', '" + month + "', '" + textBoxTotal.Text + "')";
                         ID = Convert.ToInt32(textBoxNumber.Text);
                         ExecuteQuery(txtSQLQuery);
                         MessageBox.Show("Сохранение прошло успешно");
                     }
                     else
                     {
-                        String selectCommand = "update JournalOfOperations set idSubdivision='" + toolStripComboBoxIdSubdivision.Text + "' where idJournalOfOperations=" + textBoxNumber.Text;
+                        String selectCommand = "update JournalOfOperations set idSubdivision='" + comboBoxIdSubdivision.Text + "' where idJournalOfOperations=" + textBoxNumber.Text;
                         changeValue(ConnectionString, selectCommand);
                         selectCommand = "update JournalOfOperations set Date='" + dateTimePicker1.Value.ToShortDateString() + "' where idJournalOfOperations=" + textBoxNumber.Text;
+                        changeValue(ConnectionString, selectCommand);
+                        selectCommand = "update JournalOfOperations set idTypeOfCalculation='" + comboBoxTypeOfCalculation.Text + "' where idJournalOfOperations=" + textBoxNumber.Text;
                         changeValue(ConnectionString, selectCommand);
                         selectCommand = "update JournalOfOperations set Month='" + month + "' where idJournalOfOperations=" + textBoxNumber.Text;
                         changeValue(ConnectionString, selectCommand);
@@ -396,24 +399,26 @@ namespace TiPEIS
         }
         private void toolStripComboBoxEmployees_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBoxTypeOfCalculation.Text == "Начисление заработной платы")
-            {
-                string ConnectionString = @"Data Source=" + sPath + ";New=False;Version=3";
-                if (toolStripComboBoxEmployees.ComboBox.SelectedValue != null)
-                {
-                    String idEmployee = toolStripComboBoxEmployees.ComboBox.SelectedValue.ToString();
-                    String selectSalary = "Select Salary from Employees where idEmployees=" + idEmployee;
-                    object Salary = selectValue(ConnectionString, selectSalary);
 
-                    toolStripTextBoxSum.Enabled = false;
+            string ConnectionString = @"Data Source=" + sPath + ";New=False;Version=3";
+            if (toolStripComboBoxEmployees.ComboBox.SelectedIndex != -1 && comboBoxTypeOfCalculation.SelectedIndex != -1)
+            {
+                String idEmployee = toolStripComboBoxEmployees.ComboBox.SelectedValue.ToString();
+                String selectSalary = "Select Salary from Employees where idEmployees=" + idEmployee;
+                object Salary = selectValue(ConnectionString, selectSalary);
+                String idPercent = comboBoxTypeOfCalculation.SelectedValue.ToString();
+                String selectPercent = "Select Percent from TypeOfCalculation where idTypeOfCalculation=" + idPercent;
+                object Percent = selectValue(ConnectionString, selectPercent);         
+                if (Convert.ToDouble(Percent) == 0)
+                {
                     toolStripTextBoxSum.Text = Salary.ToString();
                 }
-            }         
-            else
-            {
-                toolStripTextBoxSum.Text = "";
-                toolStripTextBoxSum.Enabled = true;
-            }
+                else
+                {
+                    double sum = Convert.ToDouble(Salary)*(Convert.ToDouble(Percent)/100);
+                    toolStripTextBoxSum.Text = sum.ToString();
+                }
+            }          
         }
         private void toolStripTextBoxSum_KeyPress(object sender, KeyPressEventArgs e)
         {

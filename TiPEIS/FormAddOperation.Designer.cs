@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.toolStripComboBoxIdSubdivision = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.buttonSave = new System.Windows.Forms.Button();
             this.textBoxTotal = new System.Windows.Forms.TextBox();
@@ -52,19 +51,11 @@
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.label4 = new System.Windows.Forms.Label();
             this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
+            this.comboBoxIdSubdivision = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).BeginInit();
             this.bindingNavigator1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // toolStripComboBoxIdSubdivision
-            // 
-            this.toolStripComboBoxIdSubdivision.FormattingEnabled = true;
-            this.toolStripComboBoxIdSubdivision.Location = new System.Drawing.Point(349, 34);
-            this.toolStripComboBoxIdSubdivision.Margin = new System.Windows.Forms.Padding(2);
-            this.toolStripComboBoxIdSubdivision.Name = "toolStripComboBoxIdSubdivision";
-            this.toolStripComboBoxIdSubdivision.Size = new System.Drawing.Size(142, 21);
-            this.toolStripComboBoxIdSubdivision.TabIndex = 33;
             // 
             // label6
             // 
@@ -156,7 +147,7 @@
             this.toolStripButtonDelete.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.toolStripButtonDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonDelete.Name = "toolStripButtonDelete";
-            this.toolStripButtonDelete.Size = new System.Drawing.Size(158, 19);
+            this.toolStripButtonDelete.Size = new System.Drawing.Size(156, 19);
             this.toolStripButtonDelete.Text = "Удалить";
             this.toolStripButtonDelete.Click += new System.EventHandler(this.toolStripButtonDelete_Click);
             // 
@@ -165,7 +156,7 @@
             this.toolStripButtonChange.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.toolStripButtonChange.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonChange.Name = "toolStripButtonChange";
-            this.toolStripButtonChange.Size = new System.Drawing.Size(158, 19);
+            this.toolStripButtonChange.Size = new System.Drawing.Size(156, 19);
             this.toolStripButtonChange.Text = "Изменить";
             this.toolStripButtonChange.Click += new System.EventHandler(this.ToolStripButtonChange_Click);
             // 
@@ -174,34 +165,35 @@
             this.toolStripButtonAdd.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.toolStripButtonAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonAdd.Name = "toolStripButtonAdd";
-            this.toolStripButtonAdd.Size = new System.Drawing.Size(158, 19);
+            this.toolStripButtonAdd.Size = new System.Drawing.Size(156, 19);
             this.toolStripButtonAdd.Text = "Добавить";
             this.toolStripButtonAdd.Click += new System.EventHandler(this.ToolStripButtonAdd_Click);
             // 
             // toolStripTextBoxSum
             // 
+            this.toolStripTextBoxSum.Enabled = false;
             this.toolStripTextBoxSum.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.toolStripTextBoxSum.Name = "toolStripTextBoxSum";
-            this.toolStripTextBoxSum.Size = new System.Drawing.Size(156, 23);
+            this.toolStripTextBoxSum.Size = new System.Drawing.Size(154, 23);
             this.toolStripTextBoxSum.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.toolStripTextBoxSum_KeyPress);
             // 
             // toolStripLabel8
             // 
             this.toolStripLabel8.Name = "toolStripLabel8";
-            this.toolStripLabel8.Size = new System.Drawing.Size(158, 15);
+            this.toolStripLabel8.Size = new System.Drawing.Size(156, 15);
             this.toolStripLabel8.Text = "Сумма";
             // 
             // toolStripComboBoxEmployees
             // 
             this.toolStripComboBoxEmployees.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.toolStripComboBoxEmployees.Name = "toolStripComboBoxEmployees";
-            this.toolStripComboBoxEmployees.Size = new System.Drawing.Size(156, 23);
+            this.toolStripComboBoxEmployees.Size = new System.Drawing.Size(154, 23);
             this.toolStripComboBoxEmployees.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxEmployees_SelectedIndexChanged);
             // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(158, 15);
+            this.toolStripLabel1.Size = new System.Drawing.Size(156, 15);
             this.toolStripLabel1.Text = "ФИО сотрудника";
             // 
             // label
@@ -229,14 +221,14 @@
             this.toolStripButtonAdd,
             this.toolStripButtonChange,
             this.toolStripButtonDelete});
-            this.bindingNavigator1.Location = new System.Drawing.Point(656, 0);
+            this.bindingNavigator1.Location = new System.Drawing.Point(658, 0);
             this.bindingNavigator1.MoveFirstItem = null;
             this.bindingNavigator1.MoveLastItem = null;
             this.bindingNavigator1.MoveNextItem = null;
             this.bindingNavigator1.MovePreviousItem = null;
             this.bindingNavigator1.Name = "bindingNavigator1";
             this.bindingNavigator1.PositionItem = null;
-            this.bindingNavigator1.Size = new System.Drawing.Size(161, 379);
+            this.bindingNavigator1.Size = new System.Drawing.Size(159, 379);
             this.bindingNavigator1.TabIndex = 19;
             this.bindingNavigator1.Text = "bindingNavigator1";
             // 
@@ -281,17 +273,25 @@
             this.dateTimePicker2.Size = new System.Drawing.Size(131, 20);
             this.dateTimePicker2.TabIndex = 38;
             // 
+            // comboBoxIdSubdivision
+            // 
+            this.comboBoxIdSubdivision.FormattingEnabled = true;
+            this.comboBoxIdSubdivision.Location = new System.Drawing.Point(350, 35);
+            this.comboBoxIdSubdivision.Name = "comboBoxIdSubdivision";
+            this.comboBoxIdSubdivision.Size = new System.Drawing.Size(141, 21);
+            this.comboBoxIdSubdivision.TabIndex = 39;
+            // 
             // FormAddOperation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(817, 379);
+            this.Controls.Add(this.comboBoxIdSubdivision);
             this.Controls.Add(this.dateTimePicker2);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.dateTimePicker1);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.comboBoxTypeOfCalculation);
-            this.Controls.Add(this.toolStripComboBoxIdSubdivision);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.textBoxTotal);
@@ -315,8 +315,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.ComboBox toolStripComboBoxIdSubdivision;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button buttonSave;
         private System.Windows.Forms.TextBox textBoxTotal;
@@ -339,5 +337,6 @@
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.DateTimePicker dateTimePicker2;
+        private System.Windows.Forms.ComboBox comboBoxIdSubdivision;
     }
 }
