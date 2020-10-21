@@ -46,6 +46,7 @@ namespace TiPEIS
                 MessageBox.Show("Поле Тип должно содержать не менее 3 и не более 50 символов");
                 return;
             }
+           
             if (toolStripTextBox3.Text.IndexOf('.') > 0)
             {
                 if (toolStripTextBox3.Text.Substring(toolStripTextBox3.Text.IndexOf('.')).Length > 3)
@@ -54,7 +55,13 @@ namespace TiPEIS
                     return;
                 }
             }
-            toolStripTextBox3.Text = toolStripTextBox3.Text.Replace(",", ".");
+            string percent = toolStripTextBox3.Text.Replace(".", ",");
+            int percent1 = Convert.ToInt32(Convert.ToDouble(percent));
+            if (percent1 >= 100)
+            {
+                MessageBox.Show("Процент должен быть меньше 100");
+                return;
+            }
             string ConnectionString = @"Data Source=" + sPath +
 ";New=False;Version=3";
             String selectCommand = "select MAX(idTypeOfCalculation) from TypeOfCalculation";
@@ -166,6 +173,13 @@ connect);
                     return;
                 }
             }
+            string percent = toolStripTextBox3.Text.Replace(".", ",");
+            int percent1 = Convert.ToInt32(Convert.ToDouble(percent));
+            if (percent1 >= 100)
+            {
+                MessageBox.Show("Процент должен быть меньше 100");
+                return;
+            }
             toolStripTextBox3.Text = toolStripTextBox3.Text.Replace(",", ".");
             //выбрана строка CurrentRow
             int CurrentRow = dataGridView1.SelectedCells[0].RowIndex;
@@ -209,9 +223,9 @@ DataGridViewCellMouseEventArgs e)
             {
                 if (toolStripTextBox3.SelectionStart == 0)
                 {
-                    if (l == '.') e.Handled = true;
+                    if (l == '.' || l == ',') e.Handled = true;
                 }
-                if (l != '.' || toolStripTextBox3.Text.IndexOf(".") != -1)
+                if (l != '.' || l == ',' || toolStripTextBox3.Text.IndexOf(".") != -1 || toolStripTextBox3.Text.IndexOf(",") != -1)
                 {
                     e.Handled = true;
                 }

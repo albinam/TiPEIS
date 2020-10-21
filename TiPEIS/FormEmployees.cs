@@ -220,7 +220,7 @@ ToolStripComboBox comboBox, string displayMember, string valueMember)
             //обновление dataGridView1
             selectCommand = "select * from Employees";
             refreshForm(ConnectionString, selectCommand);
-            toolStripTextBox1.Text = "";
+          
         }
         private void dataGridView1_CellMouseClick(object sender,
     DataGridViewCellMouseEventArgs e)
