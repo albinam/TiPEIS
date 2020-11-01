@@ -223,9 +223,9 @@ DataGridViewCellMouseEventArgs e)
             {
                 if (toolStripTextBox3.SelectionStart == 0)
                 {
-                    if (l == '.' || l == ',') e.Handled = true;
+                    if (l == '.' ) e.Handled = true;
                 }
-                if (l != '.' || l == ',' || toolStripTextBox3.Text.IndexOf(".") != -1 || toolStripTextBox3.Text.IndexOf(",") != -1)
+                if (l != '.'  || toolStripTextBox3.Text.IndexOf(".") != -1)
                 {
                     e.Handled = true;
                 }

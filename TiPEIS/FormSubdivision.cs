@@ -30,7 +30,7 @@ namespace TiPEIS
         {
             string ConnectionString = @"Data Source=" + sPath +
 ";New=False;Version=3";
-            String selectCommand = "Select * from Subdivision";
+            String selectCommand = "Select idSubdivision, NameSubdivision, Account AS  ChartOfAccounts from Subdivision join ChartOfAccounts on Subdivision.ChartOfAccounts=ChartOfAccounts.idChartOfAccounts";
             selectTable(ConnectionString, selectCommand);
             String selectSubd = "SELECT idChartOfAccounts, Account FROM ChartOfAccounts WHERE Account<30";
             selectCombo(ConnectionString, selectSubd, toolStripComboBox1, "Account",
@@ -72,11 +72,11 @@ ToolStripComboBox comboBox, string displayMember, string valueMember)
             if (Convert.ToString(maxValue) == "")
                 maxValue = 0;
             //вставка в таблицу Employees
-            string txtSQLQuery = "insert into Subdivision (idSubdivision,Name,idChartOfAccounts) values (" +
-           (Convert.ToInt32(maxValue) + 1) + ", '" + toolStripTextBox1.Text + "','" + toolStripComboBox1.ComboBox.Text + "')";
+            string txtSQLQuery = "insert into Subdivision (idSubdivision,NameSubdivision,ChartOfAccounts) values (" +
+           (Convert.ToInt32(maxValue) + 1) + ", '" + toolStripTextBox1.Text + "','" + toolStripComboBox1.ComboBox.SelectedValue + "')";
             ExecuteQuery(txtSQLQuery);
             //обновление dataGridView1
-            selectCommand = "select * from Subdivision";
+            selectCommand = "Select idSubdivision, NameSubdivision, Account AS  ChartOfAccounts from Subdivision join ChartOfAccounts on Subdivision.ChartOfAccounts=ChartOfAccounts.idChartOfAccounts";
             refreshForm(ConnectionString, selectCommand);
             toolStripTextBox1.Text = "";
             toolStripComboBox1.SelectedIndex = -1;
@@ -139,7 +139,7 @@ connect);
            ";New=False;Version=3";
             changeValue(ConnectionString, selectCommand);
             //обновление dataGridView1
-            selectCommand = "select * from Subdivision";
+            selectCommand = "Select idSubdivision, NameSubdivision, Account AS  ChartOfAccounts from Subdivision join ChartOfAccounts on Subdivision.ChartOfAccounts=ChartOfAccounts.idChartOfAccounts";
             refreshForm(ConnectionString, selectCommand);
             toolStripTextBox1.Text = "";
             toolStripComboBox1.SelectedIndex = -1;
@@ -174,17 +174,17 @@ connect);
             int CurrentRow = dataGridView1.SelectedCells[0].RowIndex;
             //получить значение FIO выбранной строки
             string valueId = dataGridView1[0, CurrentRow].Value.ToString();
-            string changeName = toolStripTextBox1.Text;
-            //обновление Name
-            String selectCommand = "update Subdivision set Name='" + changeName + "' where idSubdivision = " + valueId;
+            string changeNameSubdivision = toolStripTextBox1.Text;
+            //обновление NameSubdivision
+            String selectCommand = "update Subdivision set NameSubdivision='" + changeNameSubdivision + "' where idSubdivision = " + valueId;
             string ConnectionString = @"Data Source=" + sPath +
        ";New=False;Version=3";
             changeValue(ConnectionString, selectCommand);
-            string changeidChartOfAccounts = toolStripComboBox1.Text;
-            selectCommand = "update Subdivision set idChartOfAccounts='" + changeidChartOfAccounts + "' where idSubdivision = " + valueId;
+            string changeidChartOfAccounts = toolStripComboBox1.ComboBox.SelectedValue.ToString();
+            selectCommand = "update Subdivision set ChartOfAccounts='" + changeidChartOfAccounts + "' where idSubdivision = " + valueId;
             changeValue(ConnectionString, selectCommand);
             //обновление dataGridView1
-            selectCommand = "select * from Subdivision";
+            selectCommand = "Select idSubdivision, NameSubdivision, Account AS  ChartOfAccounts from Subdivision join ChartOfAccounts on Subdivision.ChartOfAccounts=ChartOfAccounts.idChartOfAccounts";
             refreshForm(ConnectionString, selectCommand);
             toolStripTextBox1.Text = "";
             toolStripComboBox1.SelectedIndex = -1;
@@ -195,8 +195,8 @@ DataGridViewCellMouseEventArgs e)
             //выбрана строка CurrentRow
             int CurrentRow = dataGridView1.SelectedCells[0].RowIndex;
             //получение значения
-            string NameId = dataGridView1[1, CurrentRow].Value.ToString();
-            toolStripTextBox1.Text = NameId;      
+            string NameSubdivisionId = dataGridView1[1, CurrentRow].Value.ToString();
+            toolStripTextBox1.Text = NameSubdivisionId;      
             string ChartOfAccountsId = dataGridView1[2, CurrentRow].Value.ToString();
             toolStripComboBox1.Text = ChartOfAccountsId;
         }

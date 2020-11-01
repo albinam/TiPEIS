@@ -30,10 +30,10 @@ namespace TiPEIS
         {
             string ConnectionString = @"Data Source=" + sPath +
 ";New=False;Version=3";
-            String selectCommand = "Select * from Employees";
+            String selectCommand = "Select idEmployees,FIO,PersonalInfo,Salary, NameSubdivision AS Subdivision  from Employees Join Subdivision On Subdivision.idSubdivision=Employees.Subdivision";
             selectTable(ConnectionString, selectCommand);
-            String selectSubd = "SELECT idSubdivision, Name FROM Subdivision";
-            selectCombo(ConnectionString, selectSubd, toolStripComboBox1, "Name",
+            String selectSubd = "SELECT idSubdivision, NameSubdivision FROM Subdivision";
+            selectCombo(ConnectionString, selectSubd, toolStripComboBox1, "NameSubdivision",
 "idSubdivision");
             toolStripComboBox1.SelectedIndex = -1;
         }
@@ -87,10 +87,10 @@ ToolStripComboBox comboBox, string displayMember, string valueMember)
             if (Convert.ToString(maxValue) == "")
                 maxValue = 0;
             string txtSQLQuery = "insert into Employees (idEmployees,FIO, PersonalInfo, Salary, Subdivision) values (" +
-       (Convert.ToInt32(maxValue) + 1) + ", '" + toolStripTextBox1.Text + "', '" + toolStripTextBox2.Text + "','" + toolStripTextBox3.Text + "','" + toolStripComboBox1.Text + "')";
+       (Convert.ToInt32(maxValue) + 1) + ", '" + toolStripTextBox1.Text + "', '" + toolStripTextBox2.Text + "','" + toolStripTextBox3.Text + "','" + toolStripComboBox1.ComboBox.SelectedValue + "')";
             ExecuteQuery(txtSQLQuery);
             //обновление dataGridView1
-            selectCommand = "select * from Employees";
+            selectCommand = "Select idEmployees,FIO,PersonalInfo,Salary, NameSubdivision AS Subdivision  from Employees Join Subdivision On Subdivision.idSubdivision=Employees.Subdivision";
             refreshForm(ConnectionString, selectCommand);
         }
         public object selectValue(string ConnectionString, String selectCommand)
@@ -153,7 +153,7 @@ ToolStripComboBox comboBox, string displayMember, string valueMember)
            ";New=False;Version=3";
             changeValue(ConnectionString, selectCommand);
             //обновление dataGridView1
-            selectCommand = "select * from Employees";
+            selectCommand = "Select idEmployees,FIO,PersonalInfo,Salary, NameSubdivision AS Subdivision  from Employees Join Subdivision On Subdivision.idSubdivision=Employees.Subdivision";
             refreshForm(ConnectionString, selectCommand);
             toolStripTextBox1.Text = "";
         }
@@ -214,11 +214,11 @@ ToolStripComboBox comboBox, string displayMember, string valueMember)
             string changeSalary = toolStripTextBox3.Text;
             selectCommand = "update Employees set Salary='" + changeSalary + "' where idEmployees = " + valueId;
             changeValue(ConnectionString, selectCommand);
-            string changeSubdivision = toolStripComboBox1.Text;
+            string changeSubdivision = toolStripComboBox1.ComboBox.SelectedValue.ToString();
             selectCommand = "update Employees set Subdivision='" + changeSubdivision + "' where idEmployees = " + valueId;
             changeValue(ConnectionString, selectCommand);
             //обновление dataGridView1
-            selectCommand = "select * from Employees";
+            selectCommand = "Select idEmployees,FIO,PersonalInfo,Salary, NameSubdivision AS Subdivision  from Employees Join Subdivision On Subdivision.idSubdivision=Employees.Subdivision";
             refreshForm(ConnectionString, selectCommand);
           
         }

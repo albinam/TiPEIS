@@ -52,6 +52,10 @@
             this.label4 = new System.Windows.Forms.Label();
             this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
             this.comboBoxIdSubdivision = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.comboBoxOperationType = new System.Windows.Forms.ComboBox();
+            this.buttonAddAll = new System.Windows.Forms.Button();
+            this.buttonRefresh = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).BeginInit();
             this.bindingNavigator1.SuspendLayout();
@@ -60,7 +64,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(238, 42);
+            this.label6.Location = new System.Drawing.Point(239, 10);
             this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(107, 13);
@@ -147,7 +151,7 @@
             this.toolStripButtonDelete.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.toolStripButtonDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonDelete.Name = "toolStripButtonDelete";
-            this.toolStripButtonDelete.Size = new System.Drawing.Size(156, 19);
+            this.toolStripButtonDelete.Size = new System.Drawing.Size(146, 19);
             this.toolStripButtonDelete.Text = "Удалить";
             this.toolStripButtonDelete.Click += new System.EventHandler(this.toolStripButtonDelete_Click);
             // 
@@ -156,7 +160,7 @@
             this.toolStripButtonChange.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.toolStripButtonChange.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonChange.Name = "toolStripButtonChange";
-            this.toolStripButtonChange.Size = new System.Drawing.Size(156, 19);
+            this.toolStripButtonChange.Size = new System.Drawing.Size(146, 19);
             this.toolStripButtonChange.Text = "Изменить";
             this.toolStripButtonChange.Click += new System.EventHandler(this.ToolStripButtonChange_Click);
             // 
@@ -165,35 +169,34 @@
             this.toolStripButtonAdd.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.toolStripButtonAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonAdd.Name = "toolStripButtonAdd";
-            this.toolStripButtonAdd.Size = new System.Drawing.Size(156, 19);
+            this.toolStripButtonAdd.Size = new System.Drawing.Size(146, 19);
             this.toolStripButtonAdd.Text = "Добавить";
             this.toolStripButtonAdd.Click += new System.EventHandler(this.ToolStripButtonAdd_Click);
             // 
             // toolStripTextBoxSum
             // 
-            this.toolStripTextBoxSum.Enabled = false;
             this.toolStripTextBoxSum.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.toolStripTextBoxSum.Name = "toolStripTextBoxSum";
-            this.toolStripTextBoxSum.Size = new System.Drawing.Size(154, 23);
+            this.toolStripTextBoxSum.Size = new System.Drawing.Size(144, 23);
             this.toolStripTextBoxSum.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.toolStripTextBoxSum_KeyPress);
             // 
             // toolStripLabel8
             // 
             this.toolStripLabel8.Name = "toolStripLabel8";
-            this.toolStripLabel8.Size = new System.Drawing.Size(156, 15);
+            this.toolStripLabel8.Size = new System.Drawing.Size(146, 15);
             this.toolStripLabel8.Text = "Сумма";
             // 
             // toolStripComboBoxEmployees
             // 
             this.toolStripComboBoxEmployees.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.toolStripComboBoxEmployees.Name = "toolStripComboBoxEmployees";
-            this.toolStripComboBoxEmployees.Size = new System.Drawing.Size(154, 23);
+            this.toolStripComboBoxEmployees.Size = new System.Drawing.Size(144, 23);
             this.toolStripComboBoxEmployees.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxEmployees_SelectedIndexChanged);
             // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(156, 15);
+            this.toolStripLabel1.Size = new System.Drawing.Size(146, 15);
             this.toolStripLabel1.Text = "ФИО сотрудника";
             // 
             // label
@@ -221,29 +224,30 @@
             this.toolStripButtonAdd,
             this.toolStripButtonChange,
             this.toolStripButtonDelete});
-            this.bindingNavigator1.Location = new System.Drawing.Point(658, 0);
+            this.bindingNavigator1.Location = new System.Drawing.Point(668, 0);
             this.bindingNavigator1.MoveFirstItem = null;
             this.bindingNavigator1.MoveLastItem = null;
             this.bindingNavigator1.MoveNextItem = null;
             this.bindingNavigator1.MovePreviousItem = null;
             this.bindingNavigator1.Name = "bindingNavigator1";
             this.bindingNavigator1.PositionItem = null;
-            this.bindingNavigator1.Size = new System.Drawing.Size(159, 379);
+            this.bindingNavigator1.Size = new System.Drawing.Size(149, 379);
             this.bindingNavigator1.TabIndex = 19;
             this.bindingNavigator1.Text = "bindingNavigator1";
             // 
             // comboBoxTypeOfCalculation
             // 
             this.comboBoxTypeOfCalculation.FormattingEnabled = true;
-            this.comboBoxTypeOfCalculation.Location = new System.Drawing.Point(350, 59);
+            this.comboBoxTypeOfCalculation.Location = new System.Drawing.Point(351, 35);
             this.comboBoxTypeOfCalculation.Name = "comboBoxTypeOfCalculation";
             this.comboBoxTypeOfCalculation.Size = new System.Drawing.Size(141, 21);
             this.comboBoxTypeOfCalculation.TabIndex = 34;
+            this.comboBoxTypeOfCalculation.SelectedIndexChanged += new System.EventHandler(this.comboBoxTypeOfCalculation_SelectedIndexChanged);
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(239, 67);
+            this.label7.Location = new System.Drawing.Point(239, 35);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(69, 13);
             this.label7.TabIndex = 35;
@@ -276,16 +280,62 @@
             // comboBoxIdSubdivision
             // 
             this.comboBoxIdSubdivision.FormattingEnabled = true;
-            this.comboBoxIdSubdivision.Location = new System.Drawing.Point(350, 35);
+            this.comboBoxIdSubdivision.Location = new System.Drawing.Point(351, 7);
             this.comboBoxIdSubdivision.Name = "comboBoxIdSubdivision";
             this.comboBoxIdSubdivision.Size = new System.Drawing.Size(141, 21);
             this.comboBoxIdSubdivision.TabIndex = 39;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(238, 61);
+            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(77, 13);
+            this.label5.TabIndex = 40;
+            this.label5.Text = "Тип операции";
+            // 
+            // comboBoxOperationType
+            // 
+            this.comboBoxOperationType.FormattingEnabled = true;
+            this.comboBoxOperationType.Items.AddRange(new object[] {
+            "Начисление",
+            "Удержание",
+            "Выплата"});
+            this.comboBoxOperationType.Location = new System.Drawing.Point(351, 61);
+            this.comboBoxOperationType.Name = "comboBoxOperationType";
+            this.comboBoxOperationType.Size = new System.Drawing.Size(141, 21);
+            this.comboBoxOperationType.TabIndex = 41;
+            // 
+            // buttonAddAll
+            // 
+            this.buttonAddAll.Location = new System.Drawing.Point(667, 166);
+            this.buttonAddAll.Name = "buttonAddAll";
+            this.buttonAddAll.Size = new System.Drawing.Size(139, 23);
+            this.buttonAddAll.TabIndex = 42;
+            this.buttonAddAll.Text = "Добавить всех";
+            this.buttonAddAll.UseVisualStyleBackColor = true;
+            this.buttonAddAll.Click += new System.EventHandler(this.buttonAddAll_Click);
+            // 
+            // buttonRefresh
+            // 
+            this.buttonRefresh.Location = new System.Drawing.Point(674, 200);
+            this.buttonRefresh.Name = "buttonRefresh";
+            this.buttonRefresh.Size = new System.Drawing.Size(131, 20);
+            this.buttonRefresh.TabIndex = 43;
+            this.buttonRefresh.Text = "Обновить";
+            this.buttonRefresh.UseVisualStyleBackColor = true;
+            this.buttonRefresh.Click += new System.EventHandler(this.buttonRefresh_Click);
             // 
             // FormAddOperation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(817, 379);
+            this.Controls.Add(this.buttonRefresh);
+            this.Controls.Add(this.buttonAddAll);
+            this.Controls.Add(this.comboBoxOperationType);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.comboBoxIdSubdivision);
             this.Controls.Add(this.dateTimePicker2);
             this.Controls.Add(this.label4);
@@ -338,5 +388,9 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.DateTimePicker dateTimePicker2;
         private System.Windows.Forms.ComboBox comboBoxIdSubdivision;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox comboBoxOperationType;
+        private System.Windows.Forms.Button buttonAddAll;
+        private System.Windows.Forms.Button buttonRefresh;
     }
 }

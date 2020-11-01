@@ -26,7 +26,8 @@ namespace TiPEIS
         {
             string ConnectionString = @"Data Source=" + sPath +
 ";New=False;Version=3";
-            String selectCommand = "Select * from JournalOfOperations";
+            String selectCommand = "Select idJournalOfOperations, Date, Sum, Month, NameSubdivision, OperationType,Name, " +
+                 "TypeOfCalc,Subdivision From JournalOfOperations Join Subdivision On Subdivision.idSubdivision=JournalOfOperations.Subdivision Join TypeOfCalculation On TypeOfCalculation.idTypeOfCalculation=JournalOfOperations.TypeOfCalc";
             selectTable(ConnectionString, selectCommand);
         }
         public object selectValue(string ConnectionString, String selectCommand)
@@ -37,7 +38,7 @@ namespace TiPEIS
             SQLiteCommand command = new SQLiteCommand(selectCommand,
 connect);
             SQLiteDataReader reader = command.ExecuteReader();
-            object value = "";
+            object value = ""; 
             while (reader.Read())
             {
                 value = reader[0];
@@ -93,7 +94,8 @@ connect);
             Form formAddOperation = new FormAddOperation(null);
             formAddOperation.ShowDialog();
             string ConnectionString = @"Data Source=" + sPath + ";New=False;Version=3";
-            String selectCommand = "select * from JournalOfOperations";
+            String selectCommand = "Select idJournalOfOperations, Date, Sum, Month, NameSubdivision, OperationType,Name, " +
+                  "TypeOfCalc,Subdivision From JournalOfOperations Join Subdivision On Subdivision.idSubdivision=JournalOfOperations.Subdivision Join TypeOfCalculation On TypeOfCalculation.idTypeOfCalculation=JournalOfOperations.TypeOfCalc";
             refreshForm(ConnectionString, selectCommand);
         }
         private void buttonEdit_Click(object sender, EventArgs e)
@@ -104,7 +106,8 @@ connect);
                 Form formAddOperation = new FormAddOperation(Convert.ToInt32(dataGridView1[0, CurrentRow].Value.ToString()));
                 formAddOperation.ShowDialog();
                 string ConnectionString = @"Data Source=" + sPath + ";New=False;Version=3";
-                String selectCommand = "select * from JournalOfOperations";
+                String selectCommand = "Select idJournalOfOperations, Date, Sum, Month, NameSubdivision, OperationType,Name, " +
+                   "TypeOfCalc,Subdivision From JournalOfOperations Join Subdivision On Subdivision.idSubdivision=JournalOfOperations.Subdivision Join TypeOfCalculation On TypeOfCalculation.idTypeOfCalculation=JournalOfOperations.TypeOfCalc";
                 refreshForm(ConnectionString, selectCommand);
             }
         }
@@ -115,10 +118,11 @@ connect);
             string valueId = dataGridView1[0, CurrentRow].Value.ToString();
             String deleteJournalOperation = "delete from JournalOfOperations where idJournalOfOperations=" + valueId;
             changeValue(ConnectionString, deleteJournalOperation);
-            String deleteMaterialsJournal = "delete from TablePart where idJournalOfOperations=" + valueId;
-            changeValue(ConnectionString, deleteMaterialsJournal); 
-            String selectCommand1 = "select * from JournalOfOperations";
-            selectTable(ConnectionString, selectCommand1);
+            String deleteMaterialsJournal = "delete from TablePart where JournalOfOperations=" + valueId;
+            changeValue(ConnectionString, deleteMaterialsJournal);
+            String selectCommand = "Select idJournalOfOperations, Date, Sum, Month, NameSubdivision, OperationType,Name, " +
+                  "TypeOfCalc,Subdivision From JournalOfOperations Join Subdivision On Subdivision.idSubdivision=JournalOfOperations.Subdivision Join TypeOfCalculation On TypeOfCalculation.idTypeOfCalculation=JournalOfOperations.TypeOfCalc";
+            selectTable(ConnectionString, selectCommand);
         }
     }
 }
