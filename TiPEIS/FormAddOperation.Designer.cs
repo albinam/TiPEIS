@@ -151,7 +151,7 @@
             this.toolStripButtonDelete.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.toolStripButtonDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonDelete.Name = "toolStripButtonDelete";
-            this.toolStripButtonDelete.Size = new System.Drawing.Size(146, 19);
+            this.toolStripButtonDelete.Size = new System.Drawing.Size(144, 19);
             this.toolStripButtonDelete.Text = "Удалить";
             this.toolStripButtonDelete.Click += new System.EventHandler(this.toolStripButtonDelete_Click);
             // 
@@ -160,7 +160,7 @@
             this.toolStripButtonChange.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.toolStripButtonChange.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonChange.Name = "toolStripButtonChange";
-            this.toolStripButtonChange.Size = new System.Drawing.Size(146, 19);
+            this.toolStripButtonChange.Size = new System.Drawing.Size(144, 19);
             this.toolStripButtonChange.Text = "Изменить";
             this.toolStripButtonChange.Click += new System.EventHandler(this.ToolStripButtonChange_Click);
             // 
@@ -169,7 +169,7 @@
             this.toolStripButtonAdd.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.toolStripButtonAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonAdd.Name = "toolStripButtonAdd";
-            this.toolStripButtonAdd.Size = new System.Drawing.Size(146, 19);
+            this.toolStripButtonAdd.Size = new System.Drawing.Size(144, 19);
             this.toolStripButtonAdd.Text = "Добавить";
             this.toolStripButtonAdd.Click += new System.EventHandler(this.ToolStripButtonAdd_Click);
             // 
@@ -177,26 +177,26 @@
             // 
             this.toolStripTextBoxSum.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.toolStripTextBoxSum.Name = "toolStripTextBoxSum";
-            this.toolStripTextBoxSum.Size = new System.Drawing.Size(144, 23);
+            this.toolStripTextBoxSum.Size = new System.Drawing.Size(142, 23);
             this.toolStripTextBoxSum.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.toolStripTextBoxSum_KeyPress);
             // 
             // toolStripLabel8
             // 
             this.toolStripLabel8.Name = "toolStripLabel8";
-            this.toolStripLabel8.Size = new System.Drawing.Size(146, 15);
+            this.toolStripLabel8.Size = new System.Drawing.Size(144, 15);
             this.toolStripLabel8.Text = "Сумма";
             // 
             // toolStripComboBoxEmployees
             // 
             this.toolStripComboBoxEmployees.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.toolStripComboBoxEmployees.Name = "toolStripComboBoxEmployees";
-            this.toolStripComboBoxEmployees.Size = new System.Drawing.Size(144, 23);
+            this.toolStripComboBoxEmployees.Size = new System.Drawing.Size(142, 23);
             this.toolStripComboBoxEmployees.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxEmployees_SelectedIndexChanged);
             // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(146, 15);
+            this.toolStripLabel1.Size = new System.Drawing.Size(144, 15);
             this.toolStripLabel1.Text = "ФИО сотрудника";
             // 
             // label
@@ -224,14 +224,14 @@
             this.toolStripButtonAdd,
             this.toolStripButtonChange,
             this.toolStripButtonDelete});
-            this.bindingNavigator1.Location = new System.Drawing.Point(668, 0);
+            this.bindingNavigator1.Location = new System.Drawing.Point(670, 0);
             this.bindingNavigator1.MoveFirstItem = null;
             this.bindingNavigator1.MoveLastItem = null;
             this.bindingNavigator1.MoveNextItem = null;
             this.bindingNavigator1.MovePreviousItem = null;
             this.bindingNavigator1.Name = "bindingNavigator1";
             this.bindingNavigator1.PositionItem = null;
-            this.bindingNavigator1.Size = new System.Drawing.Size(149, 379);
+            this.bindingNavigator1.Size = new System.Drawing.Size(147, 379);
             this.bindingNavigator1.TabIndex = 19;
             this.bindingNavigator1.Text = "bindingNavigator1";
             // 
@@ -309,7 +309,7 @@
             // 
             // buttonAddAll
             // 
-            this.buttonAddAll.Location = new System.Drawing.Point(667, 166);
+            this.buttonAddAll.Location = new System.Drawing.Point(674, 161);
             this.buttonAddAll.Name = "buttonAddAll";
             this.buttonAddAll.Size = new System.Drawing.Size(139, 23);
             this.buttonAddAll.TabIndex = 42;
@@ -319,9 +319,9 @@
             // 
             // buttonRefresh
             // 
-            this.buttonRefresh.Location = new System.Drawing.Point(674, 200);
+            this.buttonRefresh.Location = new System.Drawing.Point(674, 190);
             this.buttonRefresh.Name = "buttonRefresh";
-            this.buttonRefresh.Size = new System.Drawing.Size(131, 20);
+            this.buttonRefresh.Size = new System.Drawing.Size(139, 23);
             this.buttonRefresh.TabIndex = 43;
             this.buttonRefresh.Text = "Обновить";
             this.buttonRefresh.UseVisualStyleBackColor = true;

@@ -64,7 +64,7 @@ namespace TiPEIS
                 selectOperation(ConnectionString, selectCommand);
                 selectCommand = "Select idTablePart, Sum, FIO, Employees  from TablePart Join Employees On Employees.idEmployees=TablePart.Employees  where JournalOfOperations = " + textBoxNumber.Text;
                 selectTable(ConnectionString, selectCommand);
-               
+
             }
         }
         public void selectOperation(string ConnectionString, String selectCommand)
@@ -186,6 +186,7 @@ namespace TiPEIS
                 comboBoxTypeOfCalculation.Enabled = true;
                 comboBoxOperationType.Enabled = true;
                 buttonRefresh.Enabled = false;
+                buttonAddAll.Enabled = true;
                 textBoxTotal.Clear();
             }
             getSum();
@@ -226,25 +227,18 @@ namespace TiPEIS
                                     if (Convert.ToString(subd) == comboBoxIdSubdivision.SelectedValue.ToString())
                                     {
                                         if (toolStripTextBoxSum.Text != "" && toolStripTextBoxSum.Text != "0")
-                                        {
-                                            object check = selectValue(ConnectionString, selectCommand);
-                                            if (check.ToString() == "")
-                                            {
-                                                MessageBox.Show("Такой документ уже есть");
-                                            }
-                                            else
-                                            {
-                                                selectCommand = "select MAX(idTablePart) from TablePart";
-                                                object maxValue = selectValue(ConnectionString, selectCommand);
-                                                if (Convert.ToString(maxValue) == "")
-                                                    maxValue = 0;
-                                                string txtSQLQuery = "insert into TablePart (idTablePart, Employees, Sum, JournalOfOperations) values (" +
-                                           (Convert.ToInt32(maxValue) + 1) + ", '" + toolStripComboBoxEmployees.ComboBox.SelectedValue.ToString() + "','" + toolStripTextBoxSum.Text + "','" + textBoxNumber.Text + "')";
-                                                ExecuteQuery(txtSQLQuery);
-                                                //обновление dataGridView1
-                                                selectCommand = "Select idTablePart, Sum, FIO, Employees  from TablePart Join Employees On Employees.idEmployees = TablePart.Employees  where JournalOfOperations = " + textBoxNumber.Text;
-                                                refreshForm(ConnectionString, selectCommand);
-                                            }
+                                        {                                          
+                                            selectCommand = "select MAX(idTablePart) from TablePart";
+                                            object maxValue = selectValue(ConnectionString, selectCommand);
+                                            if (Convert.ToString(maxValue) == "")
+                                                maxValue = 0;
+                                            string txtSQLQuery = "insert into TablePart (idTablePart, Employees, Sum, JournalOfOperations) values (" +
+                                       (Convert.ToInt32(maxValue) + 1) + ", '" + toolStripComboBoxEmployees.ComboBox.SelectedValue.ToString() + "','" + toolStripTextBoxSum.Text + "','" + textBoxNumber.Text + "')";
+                                            ExecuteQuery(txtSQLQuery);
+                                            //обновление dataGridView1
+                                            selectCommand = "Select idTablePart, Sum, FIO, Employees  from TablePart Join Employees On Employees.idEmployees = TablePart.Employees  where JournalOfOperations = " + textBoxNumber.Text;
+                                            refreshForm(ConnectionString, selectCommand);
+
                                         }
                                         else
                                         {
@@ -369,9 +363,17 @@ namespace TiPEIS
                 if (dataGridView1.Rows.Count > 0)
                 {
                     textBoxTotal.Text = textBoxTotal.Text.Replace(",", ".");
+                   
                     //вставка в таблицу
                     if (ID == null)
                     {
+                        String selectCommand = "Select idJournalOfOperations from JournalOfOperations Where Subdivision=" + comboBoxIdSubdivision.SelectedValue.ToString() + " And CAST (Month as STRING) =" + month + " And TypeOfCalc = " + comboBoxTypeOfCalculation.SelectedValue.ToString();
+                        object check = selectValue(ConnectionString, selectCommand);
+                        if (check.ToString() != "")
+                        {
+                            MessageBox.Show("Такой документ уже есть");
+                            return;
+                        }
                         string txtSQLQuery = "insert into JournalOfOperations (idJournalOfOperations, Subdivision,TypeOfCalc, Date, Month, Sum, OperationType) values ('" +
                        textBoxNumber.Text + "', '" + comboBoxIdSubdivision.SelectedValue.ToString() + "','" + comboBoxTypeOfCalculation.SelectedValue.ToString() + "','" + dateTimePicker1.Value.ToShortDateString() + "', '" + month + "', '" + textBoxTotal.Text + "', '" + comboBoxOperationType.Text + "')";
                         ID = Convert.ToInt32(textBoxNumber.Text);
@@ -473,76 +475,85 @@ namespace TiPEIS
             }
             string month = dateTimePicker2.Value.Month.ToString() + "." + dateTimePicker2.Value.Year.ToString();
             toolStripTextBoxSum.Text = toolStripTextBoxSum.Text.Replace(",", ".");
-
+            if (comboBoxOperationType.Text == "Выплата")
+            {
+                String selectOperation = "Select COUNT(idJournalOfOperations) from JournalOfOperations Where Subdivision=" + comboBoxIdSubdivision.SelectedValue.ToString() + " And CAST (Month as STRING) =" + month + " And OperationType = " + "'Начисление'";
+                object opercount2 = selectValue(ConnectionString, selectOperation);
+                if (Convert.ToInt32(opercount2) == 0)
+                {
+                    MessageBox.Show("Не было начислений");
+                    return;
+                }
+            }
             if (comboBoxTypeOfCalculation.Text != "")
             {
                 if (comboBoxIdSubdivision.Text != "")
                 {
                     if (comboBoxOperationType.Text != "")
                     {
-                        selectCommand = "Select idJournalOfOperations from JournalOfOperations Where Subdivision=" + comboBoxIdSubdivision.SelectedValue.ToString() + " And Month=" + month + " And TypeOfCalc = " + comboBoxTypeOfCalculation.SelectedValue.ToString();
+                        selectCommand = "Select idJournalOfOperations from JournalOfOperations Where Subdivision=" + comboBoxIdSubdivision.SelectedValue.ToString() + " And CAST (Month as STRING) =" + month + " And TypeOfCalc = " + comboBoxTypeOfCalculation.SelectedValue.ToString();
                         object check = selectValue(ConnectionString, selectCommand);
-                        if (check.ToString() == "" && check == null)
+                        if (check.ToString() != "")
                         {
                             MessageBox.Show("Такой документ уже есть");
+                            return;
                         }
-                        else
+
+                        selectCommand = "select Type from TypeOfCalculation where idTypeOfCalculation = " + comboBoxTypeOfCalculation.SelectedValue.ToString();
+                        object type = selectValue(ConnectionString, selectCommand);
+                        if (Convert.ToString(type) == comboBoxOperationType.Text)
                         {
-                            selectCommand = "select Type from TypeOfCalculation where idTypeOfCalculation = " + comboBoxTypeOfCalculation.SelectedValue.ToString();
-                            object type = selectValue(ConnectionString, selectCommand);
-                            if (Convert.ToString(type) == comboBoxOperationType.Text)
+                            selectCommand = "select COUNT(idEmployees) from Employees Where Subdivision=" + comboBoxIdSubdivision.SelectedValue.ToString();
+                            object maxid = selectValue(ConnectionString, selectCommand);
+                            if (Convert.ToInt32(maxid) != 0)
                             {
-                                selectCommand = "select COUNT(idEmployees) from Employees Where Subdivision=" + comboBoxIdSubdivision.SelectedValue.ToString();
-                                object maxid = selectValue(ConnectionString, selectCommand);
-                                if (Convert.ToInt32(maxid) != 0)
+                                selectCommand = "select MAX(idEmployees) from Employees Where Subdivision=" + comboBoxIdSubdivision.SelectedValue.ToString();
+                                object maxempl = selectValue(ConnectionString, selectCommand);
+                                List<int> empl = new List<int>();
+                                empl.Add(Convert.ToInt32(maxempl));
+                                for (int j = 0; j < Convert.ToInt32(maxid) - 1; j++)
                                 {
-                                    selectCommand = "select MAX(idEmployees) from Employees Where Subdivision=" + comboBoxIdSubdivision.SelectedValue.ToString();
-                                    object maxempl = selectValue(ConnectionString, selectCommand);
-                                    List<int> empl = new List<int>();
-                                    empl.Add(Convert.ToInt32(maxempl));
-                                    for (int j = 0; j < Convert.ToInt32(maxid) - 1; j++)
-                                    {
-                                        selectCommand = "select idEmployees from Employees where Subdivision = " + comboBoxIdSubdivision.SelectedValue.ToString() + " And idEmployees<" + maxempl.ToString();
-                                        object id = selectValue(ConnectionString, selectCommand);
-                                        int i = Convert.ToInt32(id);
-                                        empl.Add(i);
-                                        maxempl = id;
-                                    }
-                                    foreach (var i in empl)
-                                    {
-                                        selectCommand = "select MAX(idTablePart) from TablePart";
-                                        object maxValue = selectValue(ConnectionString, selectCommand);
-                                        string sum;
-                                        if (comboBoxOperationType.Text == "Выплата")
-                                        {
-                                            sum = getSumEmplPay(Convert.ToInt32(i)).ToString();
-                                        }
-                                        else
-                                        {
-                                            sum = getSumEmpl(Convert.ToInt32(i)).ToString();
-                                        }
-                                        string sumDouble = sum.Replace(",", ".");
-                                        if (Convert.ToString(maxValue) == "")
-                                            maxValue = 0;
-                                        string txtSQLQuery = "insert into TablePart (idTablePart, Employees, Sum, JournalOfOperations) values (" +
-                                   (Convert.ToInt32(maxValue) + 1) + ", '" + i.ToString() + "','" + sumDouble + "','" + textBoxNumber.Text + "')";
-                                        ExecuteQuery(txtSQLQuery);
-                                    }
-                                    //обновление dataGridView1                                
-                                    selectCommand = "Select idTablePart, Sum, FIO,Employees  from TablePart Join Employees On Employees.idEmployees = TablePart.Employees  where JournalOfOperations = " + textBoxNumber.Text;
-                                    refreshForm(ConnectionString, selectCommand);
+                                    selectCommand = "select idEmployees from Employees where Subdivision = " + comboBoxIdSubdivision.SelectedValue.ToString() + " And idEmployees<" + maxempl.ToString();
+                                    object id = selectValue(ConnectionString, selectCommand);
+                                    int i = Convert.ToInt32(id);
+                                    empl.Add(i);
+                                    maxempl = id;
                                 }
-                                else
+                                foreach (var i in empl)
                                 {
-                                    MessageBox.Show("По данному подразделению нет сотрудников");
+                                    selectCommand = "select MAX(idTablePart) from TablePart";
+                                    object maxValue = selectValue(ConnectionString, selectCommand);
+                                    string sum;
+                                    if (comboBoxOperationType.Text == "Выплата")
+                                    {
+                                        sum = getSumEmplPay(Convert.ToInt32(i)).ToString();
+                                    }
+                                    else
+                                    {
+                                        sum = getSumEmpl(Convert.ToInt32(i)).ToString();
+                                    }
+                                    string sumDouble = sum.Replace(",", ".");
+                                    if (Convert.ToString(maxValue) == "")
+                                        maxValue = 0;
+                                    string txtSQLQuery = "insert into TablePart (idTablePart, Employees, Sum, JournalOfOperations) values (" +
+                               (Convert.ToInt32(maxValue) + 1) + ", '" + i.ToString() + "','" + sumDouble + "','" + textBoxNumber.Text + "')";
+                                    ExecuteQuery(txtSQLQuery);
                                 }
+                                //обновление dataGridView1                                
+                                selectCommand = "Select idTablePart, Sum, FIO,Employees  from TablePart Join Employees On Employees.idEmployees = TablePart.Employees  where JournalOfOperations = " + textBoxNumber.Text;
+                                refreshForm(ConnectionString, selectCommand);
                             }
                             else
                             {
-                                MessageBox.Show("Данный тип операции не соответствует виду расчета");
+                                MessageBox.Show("По данному подразделению нет сотрудников");
                             }
                         }
+                        else
+                        {
+                            MessageBox.Show("Данный тип операции не соответствует виду расчета");
+                        }
                     }
+
                     else
                     {
                         MessageBox.Show("Выберите тип операции");
@@ -582,17 +593,42 @@ namespace TiPEIS
         }
         public double getSumEmplPay(int id)
         {
-
             double sum = 0;
             string ConnectionString = @"Data Source=" + sPath + ";New=False;Version=3";
             String idEmployee = id.ToString();
             string month = dateTimePicker2.Value.Month.ToString() + "." + dateTimePicker2.Value.Year.ToString();
-            // month = month.Remove(month.Length - 1);
-            String selectOperation = "Select COUNT(idJournalOfOperations) from JournalOfOperations Where Subdivision=" + comboBoxIdSubdivision.SelectedValue.ToString() + " And CAST (Month as STRING) =" + month + " And OperationType = " + "'Удержание'";
+            String selectOperation = "Select COUNT(idJournalOfOperations) from JournalOfOperations Where Subdivision=" + comboBoxIdSubdivision.SelectedValue.ToString() + " And CAST (Month as STRING) =" + month + " And OperationType = " + "'Начисление'";
+            object opercount2 = selectValue(ConnectionString, selectOperation);
+            String selectOperationMax = "Select MAX(idJournalOfOperations) from JournalOfOperations Where Subdivision=" + comboBoxIdSubdivision.SelectedValue.ToString() + " And CAST (Month as STRING) =" + month + " And OperationType = " + "'Начисление'";
+            object operMax2 = selectValue(ConnectionString, selectOperationMax);
+            int count2 = Convert.ToInt32(opercount2);
+            List<int> oper2 = new List<int>();
+            int opMax2 = Convert.ToInt32(operMax2);
+            oper2.Add(opMax2);
+            double sumofaddition = 0;
+            for (int i = 0; i < count2 - 1; i++)
+            {
+                String selectOper = "Select idJournalOfOperations from JournalOfOperations Where Subdivision=" + comboBoxIdSubdivision.SelectedValue.ToString() + " And CAST (Month as STRING) =" + month + " And idJournalOfOperations<" + opMax2.ToString() + " And OperationType = " + "'Начисление'";
+                object op = selectValue(ConnectionString, selectOper);
+                int opCurr = Convert.ToInt32(op);
+                oper2.Add(opCurr);
+                opMax2 = opCurr;
+            }
+            foreach (int i in oper2)
+            {
+                String selectOper = "Select idJournalOfOperations from JournalOfOperations Where idJournalOfOperations =" + i.ToString();
+                object op = selectValue(ConnectionString, selectOper);
+                String selectSum = "Select Sum from TablePart Where JournalOfOperations =" + i.ToString() + " And Employees =" + idEmployee;
+                object sumofadd = selectValue(ConnectionString, selectSum);
+                if (sumofadd.ToString() != "")
+                    sumofaddition += Convert.ToDouble(sumofadd);
+            }
+
+            selectOperation = "Select COUNT(idJournalOfOperations) from JournalOfOperations Where Subdivision=" + comboBoxIdSubdivision.SelectedValue.ToString() + " And CAST (Month as STRING) =" + month + " And OperationType = " + "'Удержание'";
             object opercount = selectValue(ConnectionString, selectOperation);
             if (Convert.ToInt32(opercount) != 0)
             {
-                String selectOperationMax = "Select MAX(idJournalOfOperations) from JournalOfOperations Where Subdivision=" + comboBoxIdSubdivision.SelectedValue.ToString() + " And CAST (Month as STRING) =" + month + " And OperationType = " + "'Удержание'";
+                selectOperationMax = "Select MAX(idJournalOfOperations) from JournalOfOperations Where Subdivision=" + comboBoxIdSubdivision.SelectedValue.ToString() + " And CAST (Month as STRING) =" + month + " And OperationType = " + "'Удержание'";
                 object operMax = selectValue(ConnectionString, selectOperationMax);
                 int count = Convert.ToInt32(opercount);
                 List<int> oper = new List<int>();
@@ -616,19 +652,15 @@ namespace TiPEIS
                         sum += Convert.ToDouble(sumofretention);
 
                 }
-                String selectSalary = "Select Salary from Employees where idEmployees=" + idEmployee;
-                object Salary = selectValue(ConnectionString, selectSalary);
-                double totalsum = Convert.ToDouble(Salary) - sum;
+
+                double totalsum = sumofaddition - sum;
                 return totalsum;
             }
             else
             {
-                String selectSalary = "Select Salary from Employees where idEmployees=" + idEmployee;
-                object Salary = selectValue(ConnectionString, selectSalary);
-                double totalsum = Convert.ToDouble(Salary) - sum;
+                double totalsum = sumofaddition;
                 return totalsum;
             }
-
         }
         private void comboBoxTypeOfCalculation_SelectedIndexChanged(object sender, EventArgs e)
         {
