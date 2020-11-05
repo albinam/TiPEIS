@@ -708,6 +708,16 @@ namespace TiPEIS
                 MessageBox.Show("Обновление доступно только для выплат");
             }
         }
+
+       /* private void comboBoxOperationType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            char dm = (char)34;
+            string str = dm + comboBoxOperationType.Text + dm;
+            string ConnectionString = @"Data Source=" + sPath + ";New=False;Version=3";
+            String selectType = "Select idTypeOfCalculation,Name from TypeOfCalculation Where Type ="+ str;
+            selectCombo(ConnectionString, selectType, comboBoxTypeOfCalculation, "Name",
+"idTypeOfCalculation");
+        }*/
     }
 }
 

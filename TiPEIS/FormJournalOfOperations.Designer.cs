@@ -37,7 +37,7 @@
             // 
             // buttonDelete
             // 
-            this.buttonDelete.Location = new System.Drawing.Point(674, 72);
+            this.buttonDelete.Location = new System.Drawing.Point(749, 72);
             this.buttonDelete.Margin = new System.Windows.Forms.Padding(2);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(115, 24);
@@ -48,7 +48,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(674, 43);
+            this.button1.Location = new System.Drawing.Point(749, 43);
             this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(115, 25);
@@ -59,7 +59,7 @@
             // 
             // buttonCreate
             // 
-            this.buttonCreate.Location = new System.Drawing.Point(674, 14);
+            this.buttonCreate.Location = new System.Drawing.Point(749, 14);
             this.buttonCreate.Margin = new System.Windows.Forms.Padding(2);
             this.buttonCreate.Name = "buttonCreate";
             this.buttonCreate.Size = new System.Drawing.Size(115, 25);
@@ -79,14 +79,14 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersWidth = 51;
-            this.dataGridView1.Size = new System.Drawing.Size(657, 375);
+            this.dataGridView1.Size = new System.Drawing.Size(732, 375);
             this.dataGridView1.TabIndex = 9;
             // 
             // FormJournalOfOperations
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(875, 450);
             this.Controls.Add(this.buttonDelete);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.buttonCreate);

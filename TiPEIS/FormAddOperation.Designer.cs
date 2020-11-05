@@ -64,7 +64,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(239, 10);
+            this.label6.Location = new System.Drawing.Point(239, 13);
             this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(107, 13);
@@ -151,7 +151,7 @@
             this.toolStripButtonDelete.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.toolStripButtonDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonDelete.Name = "toolStripButtonDelete";
-            this.toolStripButtonDelete.Size = new System.Drawing.Size(144, 19);
+            this.toolStripButtonDelete.Size = new System.Drawing.Size(142, 19);
             this.toolStripButtonDelete.Text = "Удалить";
             this.toolStripButtonDelete.Click += new System.EventHandler(this.toolStripButtonDelete_Click);
             // 
@@ -160,7 +160,7 @@
             this.toolStripButtonChange.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.toolStripButtonChange.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonChange.Name = "toolStripButtonChange";
-            this.toolStripButtonChange.Size = new System.Drawing.Size(144, 19);
+            this.toolStripButtonChange.Size = new System.Drawing.Size(142, 19);
             this.toolStripButtonChange.Text = "Изменить";
             this.toolStripButtonChange.Click += new System.EventHandler(this.ToolStripButtonChange_Click);
             // 
@@ -169,7 +169,7 @@
             this.toolStripButtonAdd.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.toolStripButtonAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonAdd.Name = "toolStripButtonAdd";
-            this.toolStripButtonAdd.Size = new System.Drawing.Size(144, 19);
+            this.toolStripButtonAdd.Size = new System.Drawing.Size(142, 19);
             this.toolStripButtonAdd.Text = "Добавить";
             this.toolStripButtonAdd.Click += new System.EventHandler(this.ToolStripButtonAdd_Click);
             // 
@@ -177,26 +177,26 @@
             // 
             this.toolStripTextBoxSum.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.toolStripTextBoxSum.Name = "toolStripTextBoxSum";
-            this.toolStripTextBoxSum.Size = new System.Drawing.Size(142, 23);
+            this.toolStripTextBoxSum.Size = new System.Drawing.Size(140, 23);
             this.toolStripTextBoxSum.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.toolStripTextBoxSum_KeyPress);
             // 
             // toolStripLabel8
             // 
             this.toolStripLabel8.Name = "toolStripLabel8";
-            this.toolStripLabel8.Size = new System.Drawing.Size(144, 15);
+            this.toolStripLabel8.Size = new System.Drawing.Size(142, 15);
             this.toolStripLabel8.Text = "Сумма";
             // 
             // toolStripComboBoxEmployees
             // 
             this.toolStripComboBoxEmployees.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.toolStripComboBoxEmployees.Name = "toolStripComboBoxEmployees";
-            this.toolStripComboBoxEmployees.Size = new System.Drawing.Size(142, 23);
+            this.toolStripComboBoxEmployees.Size = new System.Drawing.Size(140, 23);
             this.toolStripComboBoxEmployees.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxEmployees_SelectedIndexChanged);
             // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(144, 15);
+            this.toolStripLabel1.Size = new System.Drawing.Size(142, 15);
             this.toolStripLabel1.Text = "ФИО сотрудника";
             // 
             // label
@@ -224,21 +224,21 @@
             this.toolStripButtonAdd,
             this.toolStripButtonChange,
             this.toolStripButtonDelete});
-            this.bindingNavigator1.Location = new System.Drawing.Point(670, 0);
+            this.bindingNavigator1.Location = new System.Drawing.Point(672, 0);
             this.bindingNavigator1.MoveFirstItem = null;
             this.bindingNavigator1.MoveLastItem = null;
             this.bindingNavigator1.MoveNextItem = null;
             this.bindingNavigator1.MovePreviousItem = null;
             this.bindingNavigator1.Name = "bindingNavigator1";
             this.bindingNavigator1.PositionItem = null;
-            this.bindingNavigator1.Size = new System.Drawing.Size(147, 379);
+            this.bindingNavigator1.Size = new System.Drawing.Size(145, 379);
             this.bindingNavigator1.TabIndex = 19;
             this.bindingNavigator1.Text = "bindingNavigator1";
             // 
             // comboBoxTypeOfCalculation
             // 
             this.comboBoxTypeOfCalculation.FormattingEnabled = true;
-            this.comboBoxTypeOfCalculation.Location = new System.Drawing.Point(351, 35);
+            this.comboBoxTypeOfCalculation.Location = new System.Drawing.Point(351, 64);
             this.comboBoxTypeOfCalculation.Name = "comboBoxTypeOfCalculation";
             this.comboBoxTypeOfCalculation.Size = new System.Drawing.Size(141, 21);
             this.comboBoxTypeOfCalculation.TabIndex = 34;
@@ -247,7 +247,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(239, 35);
+            this.label7.Location = new System.Drawing.Point(239, 67);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(69, 13);
             this.label7.TabIndex = 35;
@@ -288,7 +288,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(238, 61);
+            this.label5.Location = new System.Drawing.Point(239, 42);
             this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(77, 13);
@@ -302,7 +302,7 @@
             "Начисление",
             "Удержание",
             "Выплата"});
-            this.comboBoxOperationType.Location = new System.Drawing.Point(351, 61);
+            this.comboBoxOperationType.Location = new System.Drawing.Point(351, 35);
             this.comboBoxOperationType.Name = "comboBoxOperationType";
             this.comboBoxOperationType.Size = new System.Drawing.Size(141, 21);
             this.comboBoxOperationType.TabIndex = 41;
