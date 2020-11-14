@@ -20,10 +20,12 @@ namespace TiPEIS
         private DataTable DT = new DataTable();
         private string sPath = "D:\\data\\SQLiteStudio-3.2.1\\SQLiteStudio\\db\\mybd.db";
         private int? ID = null;
+        JournalEntries journal;
         public FormAddOperation(int? ID)
         {
             this.ID = ID;
             InitializeComponent();
+            journal = new JournalEntries();
         }
         private void FormAddOperation_Load(object sender, EventArgs e)
         {
@@ -226,8 +228,15 @@ namespace TiPEIS
                                 {
                                     if (Convert.ToString(subd) == comboBoxIdSubdivision.SelectedValue.ToString())
                                     {
+                                        selectCommand = "Select idJournalOfOperations from JournalOfOperations Where Subdivision=" + comboBoxIdSubdivision.SelectedValue.ToString() + " And CAST (Month as STRING) =" + month + " And TypeOfCalc = " + comboBoxTypeOfCalculation.SelectedValue.ToString();
+                                        object check = selectValue(ConnectionString, selectCommand);
+                                        if (check.ToString() != "")
+                                        {
+                                            MessageBox.Show("Такой документ уже есть");
+                                            return;
+                                        }
                                         if (toolStripTextBoxSum.Text != "" && toolStripTextBoxSum.Text != "0")
-                                        {                                          
+                                        {
                                             selectCommand = "select MAX(idTablePart) from TablePart";
                                             object maxValue = selectValue(ConnectionString, selectCommand);
                                             if (Convert.ToString(maxValue) == "")
@@ -235,10 +244,10 @@ namespace TiPEIS
                                             string txtSQLQuery = "insert into TablePart (idTablePart, Employees, Sum, JournalOfOperations) values (" +
                                        (Convert.ToInt32(maxValue) + 1) + ", '" + toolStripComboBoxEmployees.ComboBox.SelectedValue.ToString() + "','" + toolStripTextBoxSum.Text + "','" + textBoxNumber.Text + "')";
                                             ExecuteQuery(txtSQLQuery);
+                                            journal.addPostingJournal(dateTimePicker1.Value.ToShortDateString(), textBoxNumber.Text, (Convert.ToInt32(maxValue) + 1).ToString(), toolStripComboBoxEmployees.ComboBox.SelectedValue.ToString(), comboBoxTypeOfCalculation.SelectedValue.ToString(), toolStripTextBoxSum.Text, comboBoxIdSubdivision.SelectedValue.ToString());
                                             //обновление dataGridView1
                                             selectCommand = "Select idTablePart, Sum, FIO, Employees  from TablePart Join Employees On Employees.idEmployees = TablePart.Employees  where JournalOfOperations = " + textBoxNumber.Text;
                                             refreshForm(ConnectionString, selectCommand);
-
                                         }
                                         else
                                         {
@@ -310,11 +319,13 @@ namespace TiPEIS
             {
                 if (toolStripTextBoxSum.Text != "" && toolStripTextBoxSum.Text != "0")
                 {
-
+                    
                     //выбрана строка CurrentRow
                     int CurrentRow = dataGridView1.SelectedCells[0].RowIndex;
                     //получить значение FIO выбранной строки
                     string valueId = dataGridView1[0, CurrentRow].Value.ToString();
+                    selectCommand = "delete from JournalEntries where JournalOfOperations=" + textBoxNumber.Text + " and where TablePart= " + valueId;
+                    changeValue(ConnectionString, selectCommand);
                     string changeFIO = toolStripComboBoxEmployees.ComboBox.SelectedValue.ToString();
                     //обновление Name
                     selectCommand = "update TablePart set Employees='" + changeFIO + "' where idTablePart = " + valueId;
@@ -323,6 +334,7 @@ namespace TiPEIS
                     selectCommand = "update TablePart set Sum='" + changeSum + "' where idTablePart = " + valueId;
                     changeValue(ConnectionString, selectCommand);
                     //обновление dataGridView1
+                    journal.addPostingJournal(dateTimePicker1.Value.ToShortDateString(), textBoxNumber.Text, valueId, changeFIO, comboBoxTypeOfCalculation.SelectedValue.ToString(), changeSum, comboBoxIdSubdivision.SelectedValue.ToString());
                     selectCommand = "Select idTablePart, Sum, FIO, Employees  from TablePart Join Employees On Employees.idEmployees = TablePart.Employees  where JournalOfOperations = " + textBoxNumber.Text;
                     refreshForm(ConnectionString, selectCommand);
 
@@ -363,7 +375,7 @@ namespace TiPEIS
                 if (dataGridView1.Rows.Count > 0)
                 {
                     textBoxTotal.Text = textBoxTotal.Text.Replace(",", ".");
-                   
+
                     //вставка в таблицу
                     if (ID == null)
                     {
@@ -409,13 +421,15 @@ namespace TiPEIS
         }
         private void toolStripButtonDelete_Click(object sender, EventArgs e)
         {
+            string ConnectionString = @"Data Source=" + sPath +
+           ";New=False;Version=3";
             //выбрана строка CurrentRow
             int CurrentRow = dataGridView1.SelectedCells[0].RowIndex;
             //получить значение idEmployees выбранной строки
             string valueId = dataGridView1[0, CurrentRow].Value.ToString();
-            String selectCommand = "delete from TablePart where idTablePart=" + valueId;
-            string ConnectionString = @"Data Source=" + sPath +
-           ";New=False;Version=3";
+            String selectCommand = "delete from JournalEntries where JournalOfOperations=" + textBoxNumber.Text + " and TablePart= " + valueId;
+            changeValue(ConnectionString, selectCommand);
+            selectCommand = "delete from TablePart where idTablePart=" + valueId;           
             changeValue(ConnectionString, selectCommand);
             //обновление dataGridView1
             selectCommand = "Select idTablePart, Sum, FIO, Employees  from TablePart Join Employees On Employees.idEmployees = TablePart.Employees  where JournalOfOperations = " + textBoxNumber.Text;
@@ -538,6 +552,7 @@ namespace TiPEIS
                                     string txtSQLQuery = "insert into TablePart (idTablePart, Employees, Sum, JournalOfOperations) values (" +
                                (Convert.ToInt32(maxValue) + 1) + ", '" + i.ToString() + "','" + sumDouble + "','" + textBoxNumber.Text + "')";
                                     ExecuteQuery(txtSQLQuery);
+                                    journal.addPostingJournal(dateTimePicker1.Value.ToShortDateString(), textBoxNumber.Text, (Convert.ToInt32(maxValue) + 1).ToString(),  i.ToString(), comboBoxTypeOfCalculation.SelectedValue.ToString(), sumDouble, comboBoxIdSubdivision.SelectedValue.ToString());
                                 }
                                 //обновление dataGridView1                                
                                 selectCommand = "Select idTablePart, Sum, FIO,Employees  from TablePart Join Employees On Employees.idEmployees = TablePart.Employees  where JournalOfOperations = " + textBoxNumber.Text;
@@ -709,15 +724,15 @@ namespace TiPEIS
             }
         }
 
-       /* private void comboBoxOperationType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            char dm = (char)34;
-            string str = dm + comboBoxOperationType.Text + dm;
-            string ConnectionString = @"Data Source=" + sPath + ";New=False;Version=3";
-            String selectType = "Select idTypeOfCalculation,Name from TypeOfCalculation Where Type ="+ str;
-            selectCombo(ConnectionString, selectType, comboBoxTypeOfCalculation, "Name",
-"idTypeOfCalculation");
-        }*/
+        /* private void comboBoxOperationType_SelectedIndexChanged(object sender, EventArgs e)
+         {
+             char dm = (char)34;
+             string str = dm + comboBoxOperationType.Text + dm;
+             string ConnectionString = @"Data Source=" + sPath + ";New=False;Version=3";
+             String selectType = "Select idTypeOfCalculation,Name from TypeOfCalculation Where Type ="+ str;
+             selectCombo(ConnectionString, selectType, comboBoxTypeOfCalculation, "Name",
+ "idTypeOfCalculation");
+         }*/
     }
 }
 

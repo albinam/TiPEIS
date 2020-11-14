@@ -107,6 +107,7 @@
     <Compile Include="FormTypeOfCalculation.Designer.cs">
       <DependentUpon>FormTypeOfCalculation.cs</DependentUpon>
     </Compile>
+    <Compile Include="JournalEntries.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormAddOperation.resx">
