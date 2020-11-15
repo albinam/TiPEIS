@@ -32,6 +32,8 @@
             this.button1 = new System.Windows.Forms.Button();
             this.buttonCreate = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.buttonEntries = new System.Windows.Forms.Button();
+            this.buttonEntriesOperation = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -82,11 +84,33 @@
             this.dataGridView1.Size = new System.Drawing.Size(732, 375);
             this.dataGridView1.TabIndex = 9;
             // 
+            // buttonEntries
+            // 
+            this.buttonEntries.Location = new System.Drawing.Point(755, 109);
+            this.buttonEntries.Name = "buttonEntries";
+            this.buttonEntries.Size = new System.Drawing.Size(108, 38);
+            this.buttonEntries.TabIndex = 13;
+            this.buttonEntries.Text = "Посмотреть все проводки";
+            this.buttonEntries.UseVisualStyleBackColor = true;
+            this.buttonEntries.Click += new System.EventHandler(this.buttonEntries_Click);
+            // 
+            // buttonEntriesOperation
+            // 
+            this.buttonEntriesOperation.Location = new System.Drawing.Point(755, 162);
+            this.buttonEntriesOperation.Name = "buttonEntriesOperation";
+            this.buttonEntriesOperation.Size = new System.Drawing.Size(109, 54);
+            this.buttonEntriesOperation.TabIndex = 14;
+            this.buttonEntriesOperation.Text = "Посмотреть проводки по операции";
+            this.buttonEntriesOperation.UseVisualStyleBackColor = true;
+            this.buttonEntriesOperation.Click += new System.EventHandler(this.buttonEntriesOperation_Click);
+            // 
             // FormJournalOfOperations
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(875, 450);
+            this.Controls.Add(this.buttonEntriesOperation);
+            this.Controls.Add(this.buttonEntries);
             this.Controls.Add(this.buttonDelete);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.buttonCreate);
@@ -105,5 +129,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button buttonCreate;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Button buttonEntries;
+        private System.Windows.Forms.Button buttonEntriesOperation;
     }
 }

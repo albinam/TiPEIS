@@ -35,7 +35,7 @@ namespace TiPEIS
             comboBoxOperationType.SelectedIndex = -1;
             string ConnectionString = @"Data Source=" + sPath + ";New=False;Version=3";
             String selectCommand;
-            String selectSubd = "SELECT idSubdivision, NameSubdivision FROM Subdivision";
+            String selectSubd = "Select idSubdivision, NameSubdivision FROM Subdivision";
             selectCombo(ConnectionString, selectSubd, comboBoxIdSubdivision, "NameSubdivision",
 "idSubdivision");
             String selectType = "Select idTypeOfCalculation,Name from TypeOfCalculation";
@@ -318,26 +318,20 @@ namespace TiPEIS
             if (toolStripComboBoxEmployees.Text != "")
             {
                 if (toolStripTextBoxSum.Text != "" && toolStripTextBoxSum.Text != "0")
-                {
-                    
-                    //выбрана строка CurrentRow
+                {          
                     int CurrentRow = dataGridView1.SelectedCells[0].RowIndex;
-                    //получить значение FIO выбранной строки
                     string valueId = dataGridView1[0, CurrentRow].Value.ToString();
                     selectCommand = "delete from JournalEntries where JournalOfOperations=" + textBoxNumber.Text + " and where TablePart= " + valueId;
                     changeValue(ConnectionString, selectCommand);
-                    string changeFIO = toolStripComboBoxEmployees.ComboBox.SelectedValue.ToString();
-                    //обновление Name
+                    string changeFIO = toolStripComboBoxEmployees.ComboBox.SelectedValue.ToString();        
                     selectCommand = "update TablePart set Employees='" + changeFIO + "' where idTablePart = " + valueId;
                     changeValue(ConnectionString, selectCommand);
                     string changeSum = toolStripTextBoxSum.Text;
                     selectCommand = "update TablePart set Sum='" + changeSum + "' where idTablePart = " + valueId;
                     changeValue(ConnectionString, selectCommand);
-                    //обновление dataGridView1
                     journal.addPostingJournal(dateTimePicker1.Value.ToShortDateString(), textBoxNumber.Text, valueId, changeFIO, comboBoxTypeOfCalculation.SelectedValue.ToString(), changeSum, comboBoxIdSubdivision.SelectedValue.ToString());
                     selectCommand = "Select idTablePart, Sum, FIO, Employees  from TablePart Join Employees On Employees.idEmployees = TablePart.Employees  where JournalOfOperations = " + textBoxNumber.Text;
                     refreshForm(ConnectionString, selectCommand);
-
                 }
                 else
                 {
@@ -363,7 +357,6 @@ namespace TiPEIS
             trans.Commit();
             connect.Close();
         }
-
         private void ButtonSave_Click(object sender, EventArgs e)
         {
 
@@ -375,17 +368,8 @@ namespace TiPEIS
                 if (dataGridView1.Rows.Count > 0)
                 {
                     textBoxTotal.Text = textBoxTotal.Text.Replace(",", ".");
-
-                    //вставка в таблицу
                     if (ID == null)
                     {
-                        String selectCommand = "Select idJournalOfOperations from JournalOfOperations Where Subdivision=" + comboBoxIdSubdivision.SelectedValue.ToString() + " And CAST (Month as STRING) =" + month + " And TypeOfCalc = " + comboBoxTypeOfCalculation.SelectedValue.ToString();
-                        object check = selectValue(ConnectionString, selectCommand);
-                        if (check.ToString() != "")
-                        {
-                            MessageBox.Show("Такой документ уже есть");
-                            return;
-                        }
                         string txtSQLQuery = "insert into JournalOfOperations (idJournalOfOperations, Subdivision,TypeOfCalc, Date, Month, Sum, OperationType) values ('" +
                        textBoxNumber.Text + "', '" + comboBoxIdSubdivision.SelectedValue.ToString() + "','" + comboBoxTypeOfCalculation.SelectedValue.ToString() + "','" + dateTimePicker1.Value.ToShortDateString() + "', '" + month + "', '" + textBoxTotal.Text + "', '" + comboBoxOperationType.Text + "')";
                         ID = Convert.ToInt32(textBoxNumber.Text);
@@ -473,7 +457,6 @@ namespace TiPEIS
                 }
             }
         }
-
         private void buttonAddAll_Click(object sender, EventArgs e)
         {
             string ConnectionString = @"Data Source=" + sPath +
@@ -553,8 +536,7 @@ namespace TiPEIS
                                (Convert.ToInt32(maxValue) + 1) + ", '" + i.ToString() + "','" + sumDouble + "','" + textBoxNumber.Text + "')";
                                     ExecuteQuery(txtSQLQuery);
                                     journal.addPostingJournal(dateTimePicker1.Value.ToShortDateString(), textBoxNumber.Text, (Convert.ToInt32(maxValue) + 1).ToString(),  i.ToString(), comboBoxTypeOfCalculation.SelectedValue.ToString(), sumDouble, comboBoxIdSubdivision.SelectedValue.ToString());
-                                }
-                                //обновление dataGridView1                                
+                                }                              
                                 selectCommand = "Select idTablePart, Sum, FIO,Employees  from TablePart Join Employees On Employees.idEmployees = TablePart.Employees  where JournalOfOperations = " + textBoxNumber.Text;
                                 refreshForm(ConnectionString, selectCommand);
                             }
@@ -667,7 +649,6 @@ namespace TiPEIS
                         sum += Convert.ToDouble(sumofretention);
 
                 }
-
                 double totalsum = sumofaddition - sum;
                 return totalsum;
             }
@@ -696,12 +677,10 @@ namespace TiPEIS
                 toolStripTextBoxSum.Enabled = true;
             }
         }
-
         private void buttonRefresh_Click(object sender, EventArgs e)
         {
             if (comboBoxOperationType.Text == "Выплата")
             {
-
                 textBoxNumber.Text = ID.ToString();
                 int count = dataGridView1.Rows.Count;
                 String selectCommand;
@@ -723,16 +702,6 @@ namespace TiPEIS
                 MessageBox.Show("Обновление доступно только для выплат");
             }
         }
-
-        /* private void comboBoxOperationType_SelectedIndexChanged(object sender, EventArgs e)
-         {
-             char dm = (char)34;
-             string str = dm + comboBoxOperationType.Text + dm;
-             string ConnectionString = @"Data Source=" + sPath + ";New=False;Version=3";
-             String selectType = "Select idTypeOfCalculation,Name from TypeOfCalculation Where Type ="+ str;
-             selectCombo(ConnectionString, selectType, comboBoxTypeOfCalculation, "Name",
- "idTypeOfCalculation");
-         }*/
     }
 }
 

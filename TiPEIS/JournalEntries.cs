@@ -68,7 +68,10 @@ namespace TiPEIS
             this.Sum = selectValue(ConnectionString, selectCommand);
 
             selectCommand = "select ChartOfAccounts from Subdivision where idSubdivision=" + Subdivision;
-            this.DebitAccount = selectValue(ConnectionString, selectCommand);  
+            this.DebitAccount = selectValue(ConnectionString, selectCommand);
+            selectCommand = "select Account from ChartOfAccounts where idChartOfAccounts=" + this.DebitAccount;
+            this.DebitAccount = selectValue(ConnectionString, selectCommand);
+
 
             selectCommand = "select NameSubdivision from Subdivision where idSubdivision=" + Subdivision;
             this.SubcontoDt1 = selectValue(ConnectionString, selectCommand);
@@ -82,7 +85,7 @@ namespace TiPEIS
             this.SubcontoKt1 = selectValue(ConnectionString, selectCommand);
 
             selectCommand = "select NameSubdivision from Subdivision where idSubdivision=" + Subdivision;
-            this.SubcontoKt1 = selectValue(ConnectionString, selectCommand);
+            this.SubcontoKt2 = selectValue(ConnectionString, selectCommand);
             #endregion
 
             addRecord();

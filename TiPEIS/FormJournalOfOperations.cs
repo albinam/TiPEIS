@@ -124,5 +124,21 @@ connect);
                   "TypeOfCalc,Subdivision From JournalOfOperations Join Subdivision On Subdivision.idSubdivision=JournalOfOperations.Subdivision Join TypeOfCalculation On TypeOfCalculation.idTypeOfCalculation=JournalOfOperations.TypeOfCalc";
             selectTable(ConnectionString, selectCommand);
         }
+
+        private void buttonEntries_Click(object sender, EventArgs e)
+        {
+            Form formJournalEntries = new FormJournalEntries(null);
+            formJournalEntries.ShowDialog();
+            int CurrentRow = dataGridView1.SelectedCells[0].RowIndex;
+            Form formAddOperation = new FormAddOperation(Convert.ToInt32(dataGridView1[0, CurrentRow].Value.ToString()));
+            formAddOperation.ShowDialog();
+        }
+
+        private void buttonEntriesOperation_Click(object sender, EventArgs e)
+        {
+            int CurrentRow = dataGridView1.SelectedCells[0].RowIndex;
+            Form formJournalEntries = new FormJournalEntries(Convert.ToInt32(dataGridView1[0, CurrentRow].Value.ToString()));
+            formJournalEntries.ShowDialog();
+        }
     }
 }

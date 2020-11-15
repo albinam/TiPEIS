@@ -83,6 +83,12 @@
     <Compile Include="FormEmployees.Designer.cs">
       <DependentUpon>FormEmployees.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormJournalEntries.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormJournalEntries.Designer.cs">
+      <DependentUpon>FormJournalEntries.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormJournalOfOperations.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -118,6 +124,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormEmployees.resx">
       <DependentUpon>FormEmployees.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormJournalEntries.resx">
+      <DependentUpon>FormJournalEntries.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormJournalOfOperations.resx">
       <DependentUpon>FormJournalOfOperations.cs</DependentUpon>
