@@ -45,27 +45,27 @@ namespace TiPEIS
             selectCommand = "select Type from TypeOfCalculation where idTypeOfCalculation=" + Type;
             object type = selectValue(ConnectionString, selectCommand);
             string OperationType = type.ToString();
+            Sum = Sum.Replace(",", ".");
 
             if (OperationType == "Начисление")
             {
-                accrual(IdJournalOperations, Employees, Type, Sum, Subdivision);
+                accrual( Employees, Sum, Subdivision);
             }
             if (OperationType == "Удержание")
             {
-                withholding(IdJournalOperations, Employees, Type, Sum, Subdivision);
+                withholding( Employees, Type, Sum, Subdivision);
             }
             if (OperationType == "Выплата")
             {
                 payout(IdJournalOperations, Employees, Type, Sum, Subdivision);
             }
         }
-        public void /*Начисление*/ accrual(string IdJournalOperations, string Employees, string Type, string Sum, string Subdivision)
+        public void /*Начисление*/ accrual( string Employees, string Sum, string Subdivision)
         {
             string ConnectionString = @"Data Source=" + sPath + ";New=False;Version=3";
             String selectCommand;
             #region Дебет Начисление
-            selectCommand = "select Sum from TablePart where JournalOfOperations =" + IdJournalOperations + " And Employees=" + Employees;
-            this.Sum = selectValue(ConnectionString, selectCommand);
+            this.Sum = Sum;
 
             selectCommand = "select ChartOfAccounts from Subdivision where idSubdivision=" + Subdivision;
             this.DebitAccount = selectValue(ConnectionString, selectCommand);
@@ -90,7 +90,7 @@ namespace TiPEIS
 
             addRecord();
         }
-        public void /*Удержание*/ withholding(string IdJournalOperations, string Employees, string Type, string Sum, string Subdivision)
+        public void /*Удержание*/ withholding( string Employees, string Type, string Sum, string Subdivision)
         {
             string ConnectionString = @"Data Source=" + sPath + ";New=False;Version=3";
             String selectCommand;
@@ -113,10 +113,12 @@ namespace TiPEIS
             if (name == "Алименты")
                 this.CreditAccount = "" + 76;
             if (name == "Недостача")
+                this.CreditAccount = "" + 76;
+            if (name == "Ущерб за порчу ценностей")
                 this.CreditAccount = "" + 94;
 
-            selectCommand = "select Sum from TablePart where JournalOfOperations =" + IdJournalOperations + " And Employees=" + Employees;
-            this.Sum = selectValue(ConnectionString, selectCommand);
+           
+            this.Sum = Sum;
             selectCommand = "select Name from TypeOfCalculation where idTypeOfCalculation =" + Type;
             this.SubcontoKt1 = selectValue(ConnectionString, selectCommand);
             selectCommand = "select Type from TypeOfCalculation where idTypeOfCalculation=" + Type;
@@ -139,7 +141,7 @@ namespace TiPEIS
             this.SubcontoDt2 = selectValue(ConnectionString, selectCommand);
             #endregion
             selectCommand = "select Sum from TablePart where JournalOfOperations =" + IdJournalOperations + " And Employees=" + Employees;
-            this.Sum = selectValue(ConnectionString, selectCommand);
+            this.Sum = Sum;
 
             #region Кредит 51
             this.CreditAccount = "" + 51;
@@ -153,6 +155,7 @@ namespace TiPEIS
 
         public void addRecord()
         {
+            Sum = Sum.Replace(",", ".");
             string txtSQLQuery = "insert into JournalEntries (idJournalEntries,TablePart, Dt,Kt,SubkontoDt1,SubkontoKt1,SubkontoDt2,SubkontoKt2,Sum,Date,JournalOfOperations, Count) values (" +
            Id + ", " + TablePartId + ", "+ DebitAccount + ", " + CreditAccount + ", '" + SubcontoDt1 + "', '" + SubcontoKt1 + "', '"
            + SubcontoDt2 + "', '" + SubcontoKt2 + "', '" + Sum + "', '" + Date + "', " + IdOperationsJournal + ", " + Count + ")";

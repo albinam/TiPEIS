@@ -244,7 +244,7 @@ namespace TiPEIS
                                             string txtSQLQuery = "insert into TablePart (idTablePart, Employees, Sum, JournalOfOperations) values (" +
                                        (Convert.ToInt32(maxValue) + 1) + ", '" + toolStripComboBoxEmployees.ComboBox.SelectedValue.ToString() + "','" + toolStripTextBoxSum.Text + "','" + textBoxNumber.Text + "')";
                                             ExecuteQuery(txtSQLQuery);
-                                            journal.addPostingJournal(dateTimePicker1.Value.ToShortDateString(), textBoxNumber.Text, (Convert.ToInt32(maxValue) + 1).ToString(), toolStripComboBoxEmployees.ComboBox.SelectedValue.ToString(), comboBoxTypeOfCalculation.SelectedValue.ToString(), toolStripTextBoxSum.Text, comboBoxIdSubdivision.SelectedValue.ToString());
+                                            journal.addPostingJournal(dateTimePicker1.Value.ToString("yyyy-MM-dd"), textBoxNumber.Text, (Convert.ToInt32(maxValue) + 1).ToString(), toolStripComboBoxEmployees.ComboBox.SelectedValue.ToString(), comboBoxTypeOfCalculation.SelectedValue.ToString(), toolStripTextBoxSum.Text, comboBoxIdSubdivision.SelectedValue.ToString());
                                             //обновление dataGridView1
                                             selectCommand = "Select idTablePart, Sum, FIO, Employees  from TablePart Join Employees On Employees.idEmployees = TablePart.Employees  where JournalOfOperations = " + textBoxNumber.Text;
                                             refreshForm(ConnectionString, selectCommand);
@@ -329,7 +329,7 @@ namespace TiPEIS
                     string changeSum = toolStripTextBoxSum.Text;
                     selectCommand = "update TablePart set Sum='" + changeSum + "' where idTablePart = " + valueId;
                     changeValue(ConnectionString, selectCommand);
-                    journal.addPostingJournal(dateTimePicker1.Value.ToShortDateString(), textBoxNumber.Text, valueId, changeFIO, comboBoxTypeOfCalculation.SelectedValue.ToString(), changeSum, comboBoxIdSubdivision.SelectedValue.ToString());
+                    journal.addPostingJournal(dateTimePicker1.Value.ToString("yyyy-MM-dd"), textBoxNumber.Text, valueId, changeFIO, comboBoxTypeOfCalculation.SelectedValue.ToString(), changeSum, comboBoxIdSubdivision.SelectedValue.ToString());
                     selectCommand = "Select idTablePart, Sum, FIO, Employees  from TablePart Join Employees On Employees.idEmployees = TablePart.Employees  where JournalOfOperations = " + textBoxNumber.Text;
                     refreshForm(ConnectionString, selectCommand);
                 }
@@ -371,7 +371,7 @@ namespace TiPEIS
                     if (ID == null)
                     {
                         string txtSQLQuery = "insert into JournalOfOperations (idJournalOfOperations, Subdivision,TypeOfCalc, Date, Month, Sum, OperationType) values ('" +
-                       textBoxNumber.Text + "', '" + comboBoxIdSubdivision.SelectedValue.ToString() + "','" + comboBoxTypeOfCalculation.SelectedValue.ToString() + "','" + dateTimePicker1.Value.ToShortDateString() + "', '" + month + "', '" + textBoxTotal.Text + "', '" + comboBoxOperationType.Text + "')";
+                       textBoxNumber.Text + "', '" + comboBoxIdSubdivision.SelectedValue.ToString() + "','" + comboBoxTypeOfCalculation.SelectedValue.ToString() + "','" + dateTimePicker1.Value.ToString("yyyy-MM-dd") + "', '" + month + "', '" + textBoxTotal.Text + "', '" + comboBoxOperationType.Text + "')";
                         ID = Convert.ToInt32(textBoxNumber.Text);
                         ExecuteQuery(txtSQLQuery);
                         MessageBox.Show("Сохранение прошло успешно");
@@ -380,7 +380,7 @@ namespace TiPEIS
                     {
                         String selectCommand = "update JournalOfOperations set Subdivision='" + comboBoxIdSubdivision.SelectedValue.ToString() + "' where idJournalOfOperations=" + textBoxNumber.Text;
                         changeValue(ConnectionString, selectCommand);
-                        selectCommand = "update JournalOfOperations set Date='" + dateTimePicker1.Value.ToShortDateString() + "' where idJournalOfOperations=" + textBoxNumber.Text;
+                        selectCommand = "update JournalOfOperations set Date='" + dateTimePicker1.Value.ToString("yyyy-MM-dd") + "' where idJournalOfOperations=" + textBoxNumber.Text;
                         changeValue(ConnectionString, selectCommand);
                         selectCommand = "update JournalOfOperations set TypeOfCalc='" + comboBoxTypeOfCalculation.SelectedValue.ToString() + "' where idJournalOfOperations=" + textBoxNumber.Text;
                         changeValue(ConnectionString, selectCommand);
@@ -535,7 +535,7 @@ namespace TiPEIS
                                     string txtSQLQuery = "insert into TablePart (idTablePart, Employees, Sum, JournalOfOperations) values (" +
                                (Convert.ToInt32(maxValue) + 1) + ", '" + i.ToString() + "','" + sumDouble + "','" + textBoxNumber.Text + "')";
                                     ExecuteQuery(txtSQLQuery);
-                                    journal.addPostingJournal(dateTimePicker1.Value.ToShortDateString(), textBoxNumber.Text, (Convert.ToInt32(maxValue) + 1).ToString(),  i.ToString(), comboBoxTypeOfCalculation.SelectedValue.ToString(), sumDouble, comboBoxIdSubdivision.SelectedValue.ToString());
+                                    journal.addPostingJournal(dateTimePicker1.Value.ToString("yyyy-MM-dd"), textBoxNumber.Text, (Convert.ToInt32(maxValue) + 1).ToString(),  i.ToString(), comboBoxTypeOfCalculation.SelectedValue.ToString(), sumDouble, comboBoxIdSubdivision.SelectedValue.ToString());
                                 }                              
                                 selectCommand = "Select idTablePart, Sum, FIO,Employees  from TablePart Join Employees On Employees.idEmployees = TablePart.Employees  where JournalOfOperations = " + textBoxNumber.Text;
                                 refreshForm(ConnectionString, selectCommand);

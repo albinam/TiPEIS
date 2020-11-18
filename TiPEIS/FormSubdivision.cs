@@ -32,7 +32,7 @@ namespace TiPEIS
 ";New=False;Version=3";
             String selectCommand = "Select idSubdivision, NameSubdivision, Account AS  ChartOfAccounts from Subdivision join ChartOfAccounts on Subdivision.ChartOfAccounts=ChartOfAccounts.idChartOfAccounts";
             selectTable(ConnectionString, selectCommand);
-            String selectSubd = "SELECT idChartOfAccounts, Account FROM ChartOfAccounts WHERE Account<30";
+            String selectSubd = "SELECT idChartOfAccounts, Account FROM ChartOfAccounts WHERE Account<50";
             selectCombo(ConnectionString, selectSubd, toolStripComboBox1, "Account",
 "idChartOfAccounts");
             toolStripComboBox1.SelectedIndex = -1;

@@ -44,9 +44,15 @@ namespace TiPEIS
             string ConnectionString = @"Data Source=" + sPath +
           ";New=False;Version=3";
             String selectCommand;
+           
             if (ID == null)
             {
-                selectCommand = "Select Date,Sum,Dt,SubkontoDt1,SubkontoDt2,Kt,SubkontoKt1,SubkontoKt2 from JournalEntries where Date between '" + dateTimePicker1.Value.ToShortDateString() + "' and '" + dateTimePicker2.Value.ToShortDateString() + "'";
+                if (dateTimePicker1.Value.Date >= dateTimePicker2.Value.Date)
+                {
+                    MessageBox.Show("Дата начала периода должна быть меньше дата конца периода");
+                    return;
+                }
+                selectCommand = "Select Date,Sum,Dt,SubkontoDt1,SubkontoDt2,Kt,SubkontoKt1,SubkontoKt2 from JournalEntries where Date >= '" + dateTimePicker1.Value.ToString("yyyy-MM-dd") + "' and Date <= '" + dateTimePicker2.Value.ToString("yyyy-MM-dd")+"'";
                 selectTable(ConnectionString, selectCommand);    
             }
         }

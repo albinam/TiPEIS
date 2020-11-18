@@ -118,6 +118,8 @@ connect);
             string valueId = dataGridView1[0, CurrentRow].Value.ToString();
             String deleteJournalOperation = "delete from JournalOfOperations where idJournalOfOperations=" + valueId;
             changeValue(ConnectionString, deleteJournalOperation);
+            String deleteJournalEntries = "delete from JournalEntries where JournalOfOperations=" + valueId;
+            changeValue(ConnectionString, deleteJournalEntries);
             String deleteMaterialsJournal = "delete from TablePart where JournalOfOperations=" + valueId;
             changeValue(ConnectionString, deleteMaterialsJournal);
             String selectCommand = "Select idJournalOfOperations, Date, Sum, Month, NameSubdivision, OperationType,Name, " +
@@ -128,10 +130,7 @@ connect);
         private void buttonEntries_Click(object sender, EventArgs e)
         {
             Form formJournalEntries = new FormJournalEntries(null);
-            formJournalEntries.ShowDialog();
-            int CurrentRow = dataGridView1.SelectedCells[0].RowIndex;
-            Form formAddOperation = new FormAddOperation(Convert.ToInt32(dataGridView1[0, CurrentRow].Value.ToString()));
-            formAddOperation.ShowDialog();
+            formJournalEntries.ShowDialog();          
         }
 
         private void buttonEntriesOperation_Click(object sender, EventArgs e)
