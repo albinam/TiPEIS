@@ -128,7 +128,7 @@
             this.Controls.Add(this.dateTimePicker1);
             this.Controls.Add(this.label1);
             this.Name = "FormJournalEntries";
-            this.Text = "FormJournalEntries";
+            this.Text = "Журнал проводок";
             this.Load += new System.EventHandler(this.FormJournalEntries_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);

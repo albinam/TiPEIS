@@ -46,5 +46,11 @@ namespace TiPEIS
             FormJournalOfOperations newForm = new FormJournalOfOperations();
             newForm.Show();
         }
+
+        private void отчетToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormReport newForm = new FormReport();
+            newForm.Show();
+        }
     }
 }
