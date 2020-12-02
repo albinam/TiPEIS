@@ -4,12 +4,16 @@ using Microsoft.Office.Interop.Word;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Data.SQLite;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -22,7 +26,7 @@ namespace TiPEIS
         private DataSet DS = new DataSet();
         private System.Data.DataTable DT = new System.Data.DataTable();
         private string sPath = "D:\\data\\SQLiteStudio-3.2.1\\SQLiteStudio\\db\\mybd.db";
-       
+
         public FormReport()
         {
 
@@ -31,7 +35,7 @@ namespace TiPEIS
 
         private void FormReport_Load(object sender, EventArgs e)
         {
-     
+
             comboBoxTypeOperation.Items.Add("Оборотно-сальдовая ведомость");
             comboBoxTypeOperation.Items.Add("Взаиморасчёт");
             comboBoxTypeOperation.Items.Add("Ведомость выплат");
@@ -69,7 +73,7 @@ namespace TiPEIS
                 select = "Select NameSubdivision, idSubdivision from Subdivision";
                 selectCombo(ConnectionString, select, comboBoxSubdivision, "NameSubdivision", "idSubdivision");
                 dateTimePicker2.Enabled = false;
-                comboBoxAccount.Enabled = true;
+                comboBoxAccount.Enabled = false;
                 comboBoxSubdivision.Enabled = true;
                 comboBoxEmployee.Enabled = true;
             }
@@ -141,22 +145,23 @@ namespace TiPEIS
 
             if (comboBoxTypeOperation.SelectedIndex == 0)
             {
-                if (dateTimePicker1.Value.Date >= dateTimePicker2.Value.Date)
+                if (dateTimePicker1.Value.Date > dateTimePicker2.Value.Date)
                 {
                     MessageBox.Show("Дата начала периода должна быть меньше дата конца периода");
                     return;
                 }
+
                 string account = comboBoxAccount.Text.ToString();
                 string year1 = dateTimePicker1.Value.ToString("dd.mm.yy");
                 string year2 = dateTimePicker2.Value.ToString("dd.mm.yy");
                 selectCommand = "SELECT JournalOfOperations, JournalOfOperations.OperationType, " +
-                    "ROUND(SUM(CASE WHEN JournalEntries.Date < '" + dateFrom +"'AND  Dt = '" + account + "' THEN JournalEntries.Sum ELSE 0 END),2), " +
-                    "ROUND(SUM(CASE WHEN JournalEntries.Date < '" + dateFrom +"' AND Kt = '" + account + "' THEN JournalEntries.Sum ELSE 0 END),2), " +
+                    "ROUND(SUM(CASE WHEN JournalEntries.Date < '" + dateFrom + "'AND  Dt = '" + account + "' THEN JournalEntries.Sum ELSE 0 END),2), " +
+                    "ROUND(SUM(CASE WHEN JournalEntries.Date < '" + dateFrom + "' AND Kt = '" + account + "' THEN JournalEntries.Sum ELSE 0 END),2), " +
                     "ROUND(SUM(CASE WHEN JournalEntries.Date >= '" + dateFrom + "' AND JournalEntries.Date <= '" + dateTo + "' AND  Dt = '" + account + "' THEN JournalEntries.Sum ELSE 0 END),2), " +
                     "ROUND(SUM(CASE WHEN JournalEntries.Date >= '" + dateFrom + "' AND JournalEntries.Date <= '" + dateTo + "' AND  Kt = '" + account + "' THEN JournalEntries.Sum ELSE 0 END),2), " +
                     "ROUND(SUM(CASE WHEN JournalEntries.Date < '" + dateTo + "' AND  Dt = '" + account + "' THEN JournalEntries.Sum ELSE 0 END),2), " +
                     "ROUND(SUM(CASE WHEN JournalEntries.Date < '" + dateTo + "' AND  Kt = '" + account + "' THEN JournalEntries.Sum ELSE 0 END),2)" +
-                    "FROM JournalEntries JOIN JournalOfOperations ON JournalEntries.JournalOfOperations = JournalOfOperations.idJournalOfOperations WHERE JournalOfOperations.Date >= '" + dateFrom + "' and JournalEntries.Date <= '" + dateTo + "' AND JournalEntries.Dt='" + account+ "' OR JournalEntries.Kt='" + account+"' GROUP BY JournalOfOperations";
+                    "FROM JournalEntries JOIN JournalOfOperations ON JournalEntries.JournalOfOperations = JournalOfOperations.idJournalOfOperations WHERE JournalEntries.Date >= '" + dateFrom + "' and JournalEntries.Date <= '" + dateTo + "' AND JournalEntries.Dt='" + account + "' OR JournalEntries.Kt='" + account + "' GROUP BY JournalOfOperations";
 
                 selectTable(ConnectionString, selectCommand);
 
@@ -176,7 +181,7 @@ namespace TiPEIS
                     sum += Convert.ToDouble(dataGridView1[2, count].Value);
                     count++;
                 }
-                label4.Text = "" + Convert.ToString(sum);
+                labelSum.Text = "" + Convert.ToString(sum);
 
                 count = 0;
                 sum = 0;
@@ -185,7 +190,7 @@ namespace TiPEIS
                     sum += Convert.ToDouble(dataGridView1[3, count].Value);
                     count++;
                 }
-                label4.Text = label4.Text + " " + Convert.ToString(sum);
+                labelSum.Text = labelSum.Text + " " + Convert.ToString(sum);
 
                 count = 0;
                 sum = 0;
@@ -194,7 +199,7 @@ namespace TiPEIS
                     sum += Convert.ToDouble(dataGridView1[4, count].Value);
                     count++;
                 }
-                label4.Text = label4.Text + " " + Convert.ToString(sum);
+                labelSum.Text = labelSum.Text + " " + Convert.ToString(sum);
 
                 count = 0;
                 sum = 0;
@@ -203,7 +208,7 @@ namespace TiPEIS
                     sum += Convert.ToDouble(dataGridView1[5, count].Value);
                     count++;
                 }
-                label4.Text = label4.Text + " " + Convert.ToString(sum);
+                labelSum.Text = labelSum.Text + " " + Convert.ToString(sum);
 
                 count = 0;
                 sum = 0;
@@ -212,7 +217,7 @@ namespace TiPEIS
                     sum += Convert.ToDouble(dataGridView1[6, count].Value);
                     count++;
                 }
-                label4.Text = label4.Text + " " + Convert.ToString(sum);
+                labelSum.Text = labelSum.Text + " " + Convert.ToString(sum);
 
                 count = 0;
                 sum = 0;
@@ -221,18 +226,28 @@ namespace TiPEIS
                     sum += Convert.ToDouble(dataGridView1[7, count].Value);
                     count++;
                 }
-                label4.Text = label4.Text + " " + Convert.ToString(sum);
+                labelSum.Text = labelSum.Text + " " + Convert.ToString(sum);
             }
-            
+
             if (comboBoxTypeOperation.SelectedIndex == 1)
             {
+                if (comboBoxEmployee.SelectedIndex == -1)
+                {
+                    MessageBox.Show("Выберите сотрудника");
+                    return;
+                }
+                if (comboBoxSubdivision.SelectedIndex == -1)
+                {
+                    MessageBox.Show("Выберите подразделение");
+                    return;
+                }
                 selectCommand = "SELECT idEmployees, " +
                     "CASE WHEN JournalEntries.Dt LIKE '70' THEN SubkontoDt1 ELSE SubkontoKt1 END AS " +
-                    "FIO, SUM(CASE WHEN JournalEntries.Kt LIKE '70' AND JournalEntries.Date >='" +dateFrom+"' AND JournalEntries.Date <= '"+ dateTo+ "' THEN JournalEntries.Sum ELSE 0 END), " +
+                    "FIO, SUM(CASE WHEN JournalEntries.Kt LIKE '70' AND JournalEntries.Date >='" + dateFrom + "' AND JournalEntries.Date <= '" + dateTo + "' THEN JournalEntries.Sum ELSE 0 END), " +
                     "SUM(CASE WHEN JournalEntries.Dt LIKE '70' AND  JournalEntries.Kt NOT LIKE '51' " +
-                    "AND  JournalEntries.SubkontoDt2 LIKE 'НДФЛ' AND JournalEntries.Date >='" + dateFrom + "' AND JournalEntries.Date <= '" + dateTo + "' THEN JournalEntries.Sum ELSE 0 END), " +
+                    "AND  JournalEntries.SubkontoKt1 LIKE 'НДФЛ' AND JournalEntries.Date >='" + dateFrom + "' AND JournalEntries.Date <= '" + dateTo + "' THEN JournalEntries.Sum ELSE 0 END), " +
                     "SUM(CASE WHEN JournalEntries.Dt LIKE '70' AND  JournalEntries.Kt NOT LIKE '51' " +
-                    "AND  JournalEntries.SubkontoDt2 NOT LIKE 'НДФЛ' AND JournalEntries.Date >='" + dateFrom + "' AND JournalEntries.Date <= '" + dateTo + "' THEN JournalEntries.Sum ELSE 0 END), " +
+                    "AND  JournalEntries.SubkontoKt1 NOT LIKE 'НДФЛ' AND JournalEntries.Date >='" + dateFrom + "' AND JournalEntries.Date <= '" + dateTo + "' THEN JournalEntries.Sum ELSE 0 END), " +
                     "SUM(CASE WHEN JournalEntries.Dt LIKE '70' AND  JournalEntries.Kt LIKE '51' AND JournalEntries.Date >='" + dateFrom + "' AND JournalEntries.Date <= '" + dateTo + "' " +
                     "THEN JournalEntries.Sum ELSE 0 END) ";
 
@@ -265,7 +280,7 @@ namespace TiPEIS
                     sum += Convert.ToDouble(dataGridView1[2, count].Value);
                     count++;
                 }
-                label4.Text = "" + Convert.ToString(sum);
+                labelSum.Text = "" + Convert.ToString(sum);
 
                 count = 0;
                 sum = 0;
@@ -274,7 +289,7 @@ namespace TiPEIS
                     sum += Convert.ToDouble(dataGridView1[3, count].Value);
                     count++;
                 }
-                label4.Text = label4.Text + " " + Convert.ToString(sum);
+                labelSum.Text = labelSum.Text + " " + Convert.ToString(sum);
 
                 count = 0;
                 sum = 0;
@@ -283,7 +298,7 @@ namespace TiPEIS
                     sum += Convert.ToDouble(dataGridView1[4, count].Value);
                     count++;
                 }
-                label4.Text = label4.Text + " " + Convert.ToString(sum);
+                labelSum.Text = labelSum.Text + " " + Convert.ToString(sum);
 
                 count = 0;
                 sum = 0;
@@ -292,11 +307,15 @@ namespace TiPEIS
                     sum += Convert.ToDouble(dataGridView1[5, count].Value);
                     count++;
                 }
-                label4.Text = label4.Text + " " + Convert.ToString(sum);
+                labelSum.Text = labelSum.Text + " " + Convert.ToString(sum);
             }
             if (comboBoxTypeOperation.SelectedIndex == 2)
             {
-
+                if (comboBoxSubdivision.SelectedIndex == -1)
+                {
+                    MessageBox.Show("Выберите подразделение");
+                    return;
+                }
                 string year = dateTimePicker1.Value.ToString("yyyy");
                 selectCommand = "SELECT SubkontoDt1, " +
                     "SUM(CASE WHEN SUBSTR(JournalEntries.Date, 5, 4) LIKE '-01-' AND SUBSTR(JournalEntries.Date, 1, 4) ='" + year + "' THEN JournalEntries.Sum ELSE 0 END), " +
@@ -312,7 +331,7 @@ namespace TiPEIS
                     "SUM(CASE WHEN SUBSTR(JournalEntries.Date, 5, 4) LIKE '-11-' AND SUBSTR(JournalEntries.Date, 1, 4) ='" + year + "' THEN JournalEntries.Sum ELSE 0 END), " +
                     "SUM(CASE WHEN SUBSTR(JournalEntries.Date, 5, 4) LIKE '-12-' AND SUBSTR(JournalEntries.Date, 1, 4) ='" + year + "' THEN JournalEntries.Sum ELSE 0 END), " +
                     "SUM(CASE WHEN SUBSTR(JournalEntries.Date, 1, 4) LIKE '" + year + "' THEN JournalEntries.Sum ELSE 0 END) " +
-                    "FROM JournalEntries WHERE SubkontoKt1 = 'Выплата' AND  SubkontoDt1= '" + comboBoxEmployee.Text+"' GROUP BY SubkontoDt1";
+                    "FROM JournalEntries WHERE SubkontoKt1 = 'Выплата' AND  SubkontoDt2= '" + comboBoxSubdivision.Text + "' GROUP BY SubkontoDt1";
 
                 selectTable(ConnectionString, selectCommand);
                 dataGridView1.Columns[0].HeaderCell.Value = "Сотрудник";
@@ -358,8 +377,12 @@ namespace TiPEIS
                     sum += Convert.ToDouble(dataGridView1[13, count].Value);
                     count++;
                 }
-                label4.Text = "" + Convert.ToString(sum);
+                labelSum.Text = "" + Convert.ToString(sum);
 
+            }
+            else if (comboBoxTypeOperation.SelectedIndex.ToString() == "-1")
+            {
+                MessageBox.Show("Выберите вид отчета");
             }
         }
 
@@ -422,15 +445,17 @@ namespace TiPEIS
                     table.AddCell(new Phrase(dataGridView1.Rows[i].Cells[j].Value.ToString(), fontParagraph));
                 }
             }
-
-            var phraseSum = new Phrase(label4.Text.ToString(),
-            new iTextSharp.text.Font(baseFont, 16, iTextSharp.text.Font.BOLD));
-            iTextSharp.text.Paragraph paragraphSum = new
-           iTextSharp.text.Paragraph(phraseSum)
+            PdfPTable table2 = new PdfPTable(dataGridView1.Columns.Count);
+            String s = labelSum.Text;
+            List<string> words = new List<string>();
+            string[] sum = { "Итого:", "" };
+            words.AddRange(sum);
+            String[] words1 = s.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            words.AddRange(words1);
+            for (int j = 0; j < words.Count; j++)
             {
-                Alignment = Element.ALIGN_RIGHT - 1,
-                SpacingAfter = 12,
-            };
+                table2.AddCell(new Phrase(words[j], fontParagraph));
+            }
             using (FileStream stream = new FileStream(sfd.FileName, FileMode.Create))
             {
                 iTextSharp.text.Document pdfDoc = new iTextSharp.text.Document(PageSize.A2, 10f, 10f, 10f, 0f);
@@ -438,10 +463,22 @@ namespace TiPEIS
                 pdfDoc.Open();
                 pdfDoc.Add(paragraph);
                 pdfDoc.Add(table);
-                pdfDoc.Add(paragraphSum);
+                pdfDoc.Add(table2);
                 pdfDoc.Close();
                 stream.Close();
             }
+            string mailAddress = textBoxEmail.Text;
+            if (!string.IsNullOrEmpty(mailAddress))
+            {
+                if (Regex.IsMatch(mailAddress, @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-
+!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9az][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,17}))$"))
+                {
+                    MessageBox.Show("Неверный формат для электронной почты", "Ошибка",
+                   MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+            SendEmailForClients(mailAddress, "Отчеты:", "", sfd.FileName);
         }
 
         public void saveDoc(string FileName)
@@ -498,7 +535,7 @@ namespace TiPEIS
                     }
                 }
                 var table = document.Tables.Add(rangeTable, dataGridView1.Rows.Count + 1, count, ref
-       missing, ref missing);
+        missing, ref missing);
                 font = table.Range.Font;
                 font.Size = 14;
                 font.Name = "Times New Roman";
@@ -527,21 +564,22 @@ namespace TiPEIS
                         }
                     }
                 }
+              
+                String s = labelSum.Text;
+                List<string> words = new List<string>();
+                string[] sum = { "Итого:", "" };
+                words.AddRange(sum);
+                String[] words1 = s.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                words.AddRange(words1);
+                count = 0;
+                for (int j = 0; j < words.Count; j++)
+                {
+                    table.Cell(dataGridView1.Rows.Count+1,count+1 ).Range.Text=words[j];
+                    count++;
+                }
                 //задаем границы таблицы
                 table.Borders.InsideLineStyle = WdLineStyle.wdLineStyleInset;
-                table.Borders.OutsideLineStyle = WdLineStyle.wdLineStyleSingle;
-                paragraph = document.Paragraphs.Add(missing);
-                range = paragraph.Range;
-                range.Text = label4.Text.ToString();
-                font = range.Font;
-                font.Size = 12;
-                font.Name = "Times New Roman";
-                paragraphFormat = range.ParagraphFormat;
-                paragraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphRight;
-                paragraphFormat.LineSpacingRule = WdLineSpacing.wdLineSpaceSingle;
-                paragraphFormat.SpaceAfter = 10;
-                paragraphFormat.SpaceBefore = 10;
-                range.InsertParagraphAfter();
+                table.Borders.OutsideLineStyle = WdLineStyle.wdLineStyleSingle;            
                 //сохраняем
                 object fileFormat = WdSaveFormat.wdFormatXMLDocument;
                 document.SaveAs(FileName, ref fileFormat, ref missing,
@@ -559,6 +597,18 @@ namespace TiPEIS
             {
                 winword.Quit();
             }
+            string mailAddress = textBoxEmail.Text;
+            if (!string.IsNullOrEmpty(mailAddress))
+            {
+                if (Regex.IsMatch(mailAddress, @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-
+!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9az][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,17}))$"))
+                {
+                    MessageBox.Show("Неверный формат для электронной почты", "Ошибка",
+                   MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+            SendEmailForClients(mailAddress, "Отчеты:", "", FileName);
         }
         private void buttonToWord_Click(object sender, EventArgs e)
         {
@@ -585,6 +635,39 @@ namespace TiPEIS
                     MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK,
                    MessageBoxIcon.Error);
                 }
+            }
+        }
+        private void SendEmailForClients(string mailAddress, string subject, string text, string attachmentPath)
+        {
+            System.Net.Mail.MailMessage m = new System.Net.Mail.MailMessage();
+            SmtpClient smtpClient = null;
+            try
+            {
+                m.From = new MailAddress(ConfigurationManager.AppSettings["MailLogin"]);
+                m.To.Add(new MailAddress(mailAddress));
+                m.Subject = subject;
+                m.Body = text;
+                m.SubjectEncoding = System.Text.Encoding.UTF8;
+                m.BodyEncoding = System.Text.Encoding.UTF8;
+                m.Attachments.Add(new Attachment(attachmentPath));
+                smtpClient = new SmtpClient("smtp.gmail.com", 587);
+                smtpClient.UseDefaultCredentials = false;
+                smtpClient.EnableSsl = true;
+                smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                smtpClient.Credentials = new NetworkCredential(
+                    ConfigurationManager.AppSettings["MailLogin"],
+                    ConfigurationManager.AppSettings["MailPassword"]
+                    );
+                smtpClient.Send(m);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                m = null;
+                smtpClient = null;
             }
         }
     }
