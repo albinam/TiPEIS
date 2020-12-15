@@ -52,5 +52,6 @@ namespace TiPEIS
             FormReport newForm = new FormReport();
             newForm.Show();
         }
+
     }
 }

@@ -49,12 +49,14 @@
             this.button3 = new System.Windows.Forms.Button();
             this.textBoxEmail = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.buttonSaveXls = new System.Windows.Forms.Button();
+            this.buttonSaveZip = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(684, 102);
+            this.button2.Location = new System.Drawing.Point(692, 101);
             this.button2.Margin = new System.Windows.Forms.Padding(2);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(124, 25);
@@ -246,7 +248,7 @@
             // 
             // textBoxEmail
             // 
-            this.textBoxEmail.Location = new System.Drawing.Point(606, 75);
+            this.textBoxEmail.Location = new System.Drawing.Point(555, 72);
             this.textBoxEmail.Name = "textBoxEmail";
             this.textBoxEmail.Size = new System.Drawing.Size(131, 20);
             this.textBoxEmail.TabIndex = 33;
@@ -254,17 +256,39 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(635, 59);
+            this.label4.Location = new System.Drawing.Point(569, 56);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(86, 13);
             this.label4.TabIndex = 34;
             this.label4.Text = "Адрес эл.почты";
+            // 
+            // buttonSaveXls
+            // 
+            this.buttonSaveXls.Location = new System.Drawing.Point(692, 72);
+            this.buttonSaveXls.Name = "buttonSaveXls";
+            this.buttonSaveXls.Size = new System.Drawing.Size(124, 24);
+            this.buttonSaveXls.TabIndex = 35;
+            this.buttonSaveXls.Text = "Сохранить в xls";
+            this.buttonSaveXls.UseVisualStyleBackColor = true;
+            this.buttonSaveXls.Click += new System.EventHandler(this.buttonSaveXls_Click);
+            // 
+            // buttonSaveZip
+            // 
+            this.buttonSaveZip.Location = new System.Drawing.Point(692, 22);
+            this.buttonSaveZip.Name = "buttonSaveZip";
+            this.buttonSaveZip.Size = new System.Drawing.Size(116, 24);
+            this.buttonSaveZip.TabIndex = 36;
+            this.buttonSaveZip.Text = "Сохранить в архив";
+            this.buttonSaveZip.UseVisualStyleBackColor = true;
+            this.buttonSaveZip.Click += new System.EventHandler(this.buttonSaveZIP_Click);
             // 
             // FormReport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(858, 496);
+            this.Controls.Add(this.buttonSaveZip);
+            this.Controls.Add(this.buttonSaveXls);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.textBoxEmail);
             this.Controls.Add(this.button3);
@@ -318,5 +342,7 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.TextBox textBoxEmail;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button buttonSaveXls;
+        private System.Windows.Forms.Button buttonSaveZip;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
+using Microsoft.Office.Interop.Excel;
 using Microsoft.Office.Interop.Word;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Data;
 using System.Data.SQLite;
 using System.Drawing;
 using System.IO;
+using Ionic.Zip;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -388,14 +390,22 @@ namespace TiPEIS
 
         private void buttonPDF_Click(object sender, EventArgs e)
         {
+
+            if (dateTimePicker1.Value.Date >= dateTimePicker2.Value.Date)
+            {
+                MessageBox.Show("Дата начала должна быть меньше даты окончания",
+               "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             SaveFileDialog sfd = new SaveFileDialog
             {
-                Filter = "pdf|*.pdf"
+                Filter = "doc|*.doc"
             };
             if (sfd.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
+                    savePDF(sfd.FileName);
                     MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
                 }
@@ -405,7 +415,9 @@ namespace TiPEIS
                    MessageBoxIcon.Error);
                 }
             }
-
+        }
+        public void savePDF(string FileName)
+        {
             string FONT_LOCATION = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.TTF"); //определяем В СИСТЕМЕ(чтобы не копировать файл) расположение шрифта arial.ttf
             BaseFont baseFont = BaseFont.CreateFont(FONT_LOCATION, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED); //создаем шрифт
             iTextSharp.text.Font fontParagraph = new iTextSharp.text.Font(baseFont, 17, iTextSharp.text.Font.NORMAL); //регистрируем + можно задать параметры для него(17 - размер, последний параметр - стиль)
@@ -456,7 +468,7 @@ namespace TiPEIS
             {
                 table2.AddCell(new Phrase(words[j], fontParagraph));
             }
-            using (FileStream stream = new FileStream(sfd.FileName, FileMode.Create))
+            using (FileStream stream = new FileStream(FileName, FileMode.Create))
             {
                 iTextSharp.text.Document pdfDoc = new iTextSharp.text.Document(PageSize.A2, 10f, 10f, 10f, 0f);
                 PdfWriter.GetInstance(pdfDoc, stream);
@@ -477,10 +489,51 @@ namespace TiPEIS
                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
+                else
+                {
+                    SendEmailForClients(mailAddress, "Отчеты:", "", FileName);
+                }
             }
-            SendEmailForClients(mailAddress, "Отчеты:", "", sfd.FileName);
+        }
+        public void saveRAR(string FileName)
+        {
+            using (ZipFile zip = new ZipFile())
+            {
+                savePDF(@"D:\универ\3 курс\тип эис\отчеты\ReportPdf.pdf");
+                saveDoc(@"D:\универ\3 курс\тип эис\отчеты\ReportDoc.doc");
+                saveXls(@"D:\универ\3 курс\тип эис\отчеты\ReportXls.xls");
+                zip.AddDirectory(@"D:\универ\3 курс\тип эис\отчеты\");
+                zip.Save(FileName);
+            }
         }
 
+        private void buttonSaveZIP_Click(object sender, EventArgs e)
+        {
+            if (dateTimePicker1.Value.Date >= dateTimePicker2.Value.Date)
+            {
+                MessageBox.Show("Дата начала должна быть меньше даты окончания",
+               "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            SaveFileDialog sfd = new SaveFileDialog
+            {
+                Filter = "rar|*.rar"
+            };
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    saveRAR(sfd.FileName);
+                    MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK,
+                   MessageBoxIcon.Error);
+                }
+            }
+        }
         public void saveDoc(string FileName)
         {
             var winword = new Microsoft.Office.Interop.Word.Application();
@@ -564,7 +617,7 @@ namespace TiPEIS
                         }
                     }
                 }
-              
+
                 String s = labelSum.Text;
                 List<string> words = new List<string>();
                 string[] sum = { "Итого:", "" };
@@ -574,12 +627,12 @@ namespace TiPEIS
                 count = 0;
                 for (int j = 0; j < words.Count; j++)
                 {
-                    table.Cell(dataGridView1.Rows.Count+1,count+1 ).Range.Text=words[j];
+                    table.Cell(dataGridView1.Rows.Count + 1, count + 1).Range.Text = words[j];
                     count++;
                 }
                 //задаем границы таблицы
                 table.Borders.InsideLineStyle = WdLineStyle.wdLineStyleInset;
-                table.Borders.OutsideLineStyle = WdLineStyle.wdLineStyleSingle;            
+                table.Borders.OutsideLineStyle = WdLineStyle.wdLineStyleSingle;
                 //сохраняем
                 object fileFormat = WdSaveFormat.wdFormatXMLDocument;
                 document.SaveAs(FileName, ref fileFormat, ref missing,
@@ -607,8 +660,11 @@ namespace TiPEIS
                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
+                else
+                {
+                    SendEmailForClients(mailAddress, "Отчеты:", "", FileName);
+                }
             }
-            SendEmailForClients(mailAddress, "Отчеты:", "", FileName);
         }
         private void buttonToWord_Click(object sender, EventArgs e)
         {
@@ -637,8 +693,146 @@ namespace TiPEIS
                 }
             }
         }
+        private void buttonSaveXls_Click(object sender, EventArgs e)
+        {
+            if (dateTimePicker1.Value.Date >= dateTimePicker2.Value.Date)
+            {
+                MessageBox.Show("Дата начала должна быть меньше даты окончания",
+               "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            SaveFileDialog sfd = new SaveFileDialog
+            {
+                Filter = "xls|*.xls|xlsx|*.xlsx"
+            };
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    saveXls(sfd.FileName);
+                    MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK,
+                   MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        public void saveXls(string FileName)
+        {
+            var excel = new Microsoft.Office.Interop.Excel.Application();
+            try
+            {
+                if (File.Exists(FileName))
+                {
+                    excel.Workbooks.Open(FileName, Type.Missing, Type.Missing,
+                   Type.Missing,
+                    Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                   Type.Missing,
+                    Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                   Type.Missing,
+                    Type.Missing);
+                }
+                else
+                {
+                    excel.SheetsInNewWorkbook = 1;
+                    excel.Workbooks.Add(Type.Missing);
+                    excel.Workbooks[1].SaveAs(FileName, XlFileFormat.xlExcel8,
+                    Type.Missing,
+                     Type.Missing, false, false, XlSaveAsAccessMode.xlNoChange,
+                    Type.Missing,
+                     Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+                }
+                Sheets excelsheets = excel.Workbooks[1].Worksheets;
+
+                var excelworksheet = (Worksheet)excelsheets.get_Item(1);
+                excelworksheet.Cells.Clear();
+                Microsoft.Office.Interop.Excel.Range excelcells = excelworksheet.get_Range("A1", "H1");
+                excelcells.Merge(Type.Missing);
+                excelcells.Font.Bold = true;
+                string title = "";
+                if (comboBoxTypeOperation.SelectedIndex == 0)
+                {
+                    title = "Оборотно-сальдовая ведомость по счёту " + comboBoxAccount.Text + " \"" + comboBoxAccount.SelectedValue + "\" с " + Convert.ToString(dateTimePicker1.Text) + " по " + Convert.ToString(dateTimePicker2.Text) + "";
+                }
+                if (comboBoxTypeOperation.SelectedIndex == 1)
+                {
+                    title = "Ведомость взаиморасчёта с сотрудниками " + comboBoxSubdivision.Text + " " + comboBoxEmployee.Text + " с " + Convert.ToString(dateTimePicker1.Text) + " по " + Convert.ToString(dateTimePicker2.Text) + "";
+                }
+                if (comboBoxTypeOperation.SelectedIndex == 2)
+                {
+                    title = "Ведомость выплат за год " + dateTimePicker1.Value.ToString("yyyy") + "";
+                }
+                excelcells.Value2 = title;
+                excelcells.RowHeight = 40;
+                excelcells.HorizontalAlignment = Microsoft.Office.Interop.Excel.XlHAlign.xlHAlignCenter;
+                excelcells.VerticalAlignment = Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter;
+                excelcells.Font.Name = "Times New Roman";
+                excelcells.Font.Size = 14;
+
+                for (int j = 0; j < dataGridView1.Columns.Count; j++)
+                {
+                    excelcells = excelworksheet.get_Range("A3", "A3");
+                    excelcells = excelcells.get_Offset(0, j);
+                    excelcells.ColumnWidth = 15;
+                    excelcells.Value2 = dataGridView1.Columns[j].HeaderCell.Value.ToString();
+                    excelcells.Font.Bold = true;
+                }
+
+                for (int i = 0; i < dataGridView1.Rows.Count; i++)
+                {
+                    for (int j = 0; j < dataGridView1.Columns.Count; j++)
+                    {
+                        excelcells = excelworksheet.get_Range("A4", "A4");
+                        excelcells = excelcells.get_Offset(i, j);
+                        excelcells.ColumnWidth = 15;
+                        excelcells.Value2 = dataGridView1.Rows[i].Cells[j].Value.ToString();
+                    }
+                }
+                String s = labelSum.Text;
+                List<string> words = new List<string>();
+                string[] sum = { "Итого:", "" };
+                words.AddRange(sum);
+                String[] words1 = s.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                words.AddRange(words1);
+                for (int j = 0; j < words.Count; j++)
+                {
+                    excelcells = excelworksheet.get_Range("A5", "A5");
+                    excelcells = excelcells.get_Offset(dataGridView1.Rows.Count + 1, j);
+                    excelcells.ColumnWidth = 25;
+                    excelcells.Value2 = words[j].ToString();
+                }
+                excel.Workbooks[1].Save();
+            }
+            catch (Exception)
+            {
+            }
+            finally
+            {
+                excel.Quit();
+            }
+            string mailAddress = textBoxEmail.Text;
+            if (!string.IsNullOrEmpty(mailAddress))
+            {
+                if (Regex.IsMatch(mailAddress, @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-
+!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9az][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,17}))$"))
+                {
+                    MessageBox.Show("Неверный формат для электронной почты", "Ошибка",
+                   MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                else
+                {
+                    SendEmailForClients(mailAddress, "Отчеты:", "", FileName);
+                }
+            }
+        }
         private void SendEmailForClients(string mailAddress, string subject, string text, string attachmentPath)
         {
+
             System.Net.Mail.MailMessage m = new System.Net.Mail.MailMessage();
             SmtpClient smtpClient = null;
             try
